@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="ErrMsgMgmtDBDAOErrMsgDuplicatedVORSQL">
+			<desc><![CDATA[D]]></desc>
+			<sql><![CDATA[
+SELECT COUNT(ERR_MSG_CD)
+FROM COM_ERR_MSG
+WHERE	ERR_MSG_CD = @[err_msg_cd]			]]></sql>
+			<params>
+				<param name="err_msg_cd" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

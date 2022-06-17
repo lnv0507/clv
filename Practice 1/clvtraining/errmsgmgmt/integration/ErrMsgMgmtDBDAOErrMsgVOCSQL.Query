@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="ErrMsgMgmtDBDAOErrMsgVOCSQL">
+			<desc><![CDATA[I]]></desc>
+			<sql><![CDATA[
+INSERT INTO COM_ERR_MSG (
+	EDW_UPD_DT
+,	UPD_DT
+,	UPD_USR_ID
+,	CRE_DT
+,	CRE_USR_ID
+,	ERR_DESC
+,	ERR_MSG
+,	ERR_LVL_CD
+,	ERR_TP_CD
+,	LANG_TP_CD
+,	ERR_MSG_CD
+) VALUES( 
+	sysdate
+,	sysdate
+,	@[cre_usr_id]
+,	sysdate
+,	@[cre_usr_id]
+,	@[err_desc]
+,	@[err_msg]
+,	@[err_lvl_cd]
+,	@[err_tp_cd]
+,	@[lang_tp_cd]
+,	@[err_msg_cd]
+)			]]></sql>
+			<params>
+				<param name="cre_usr_id" type="12" value="" out="N"/>
+				<param name="err_desc" type="12" value="" out="N"/>
+				<param name="err_msg" type="12" value="" out="N"/>
+				<param name="err_lvl_cd" type="12" value="" out="N"/>
+				<param name="err_tp_cd" type="12" value="" out="N"/>
+				<param name="lang_tp_cd" type="12" value="" out="N"/>
+				<param name="err_msg_cd" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>
