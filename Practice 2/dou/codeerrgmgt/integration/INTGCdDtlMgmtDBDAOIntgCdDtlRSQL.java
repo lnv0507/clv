@@ -4,10 +4,10 @@
 *@FileTitle : 
 *Open Issues :
 *Change history :
-*@LastModifyDate : 2022.06.20
+*@LastModifyDate : 2022.06.22
 *@LastModifier : 
 *@LastVersion : 1.0
-* 2022.06.20 
+* 2022.06.22 
 * 1.0 Creation
 =========================================================*/
 package com.clt.apps.opus.dou.doutraining.codeerrgmgt.integration;
@@ -74,7 +74,8 @@ public class INTGCdDtlMgmtDBDAOIntgCdDtlRSQL implements ISQLTemplate{
 		query.append(",	INTG_CD_VAL_CTNT" ).append("\n"); 
 		query.append(",	INTG_CD_ID" ).append("\n"); 
 		query.append("FROM COM_INTG_CD_DTL" ).append("\n"); 
-		query.append("WHERE INTG_CD_ID = @[intg_cd_id]" ).append("\n"); 
+		query.append("WHERE 0=0" ).append("\n"); 
+		query.append("AND INTG_CD_ID = @[intg_cd_id]" ).append("\n"); 
 
 	}
 }

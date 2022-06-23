@@ -53,11 +53,6 @@
 	<form name="form">
 		<input type="hidden" name="f_cmd"> 
 		<div class="page_title_area clear">
-		<h2 class="page_title">
-		<button type="button">
-		<span id="title"></span>
-		</button>
-		</h2>
 		<div class="opus_design_btn">
 		  <button type="button" class="btn_accent" name="btn_Save" id="btn_Save">Save</button><!--
 		   -->
@@ -66,8 +61,8 @@
 		</div>
 	</div>
 	
-	<div class="wrap_search">
-		<div class="opus_design_inquiry">
+	<div class="wrap_search_tab">
+		<div class="opus_design_inquiry wFit">
 		    <table>
 		        <tbody>
 				<tr>
@@ -83,6 +78,9 @@
 		
 		<div class="wrap_result">
 		<div class="opus_design_grid">
+		<div class="opus_design_tab"></div>
+		<div class="opus_design_inquiry wFit"></div>
+		<div id="tabLayer"></div>
 			<h3 class="title_design">Master</h3>
 			<div class="opus_design_btn">
 				<button type="button" class="btn_normal" name="btn_rowadd_ms" id="btn_rowadd_ms">Row Add</button>

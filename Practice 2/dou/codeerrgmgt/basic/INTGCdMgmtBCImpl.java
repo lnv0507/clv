@@ -11,51 +11,38 @@ import com.clt.framework.core.layer.event.EventException;
 import com.clt.framework.core.layer.integration.DAOException;
 import com.clt.framework.support.layer.basic.BasicCommandSupport;
 import com.clt.framework.support.view.signon.SignOnUserAccount;
-
+	/**
+	 * 
+	 * @author Nguyen Viet Lam
+	 *
+	 */
 public class INTGCdMgmtBCImpl extends BasicCommandSupport implements
 		INTGCdMgmtBC {
 
 	private transient INTGCdMgMtDBDAO dbDao = null;
 	private transient INTGCdDtlMgmtDBDAO dbDaoDetail = null;
-
+	
 	public INTGCdMgmtBCImpl() {
 		dbDao = new INTGCdMgMtDBDAO();
 		dbDaoDetail = new INTGCdDtlMgmtDBDAO();
 	}
-
-	// public int checkDuplicated(ErrMsgVO errMsgVO) throws EventException {
-	// try {
-	// // return count
-	// return dbDao.duplicated(errMsgVO);
-	// } catch (DAOException ex) {
-	// throw new EventException(new ErrorHandler(ex).getMessage(), ex);
-	// } catch (Exception ex) {
-	// throw new EventException(new ErrorHandler(ex).getMessage(), ex);
-	// }
-	//
-	// }
-	//
-	// public boolean checkDuplicateMsgCd(ErrMsgVO errMsg, List<ErrMsgVO>
-	// errList) {
-	// for (ErrMsgVO err : errList) {
-	// if (err.getErrMsgCd().equals(errMsg.getErrMsgCd())) {
-	// return false;
-	// }
-	// }
-	// return true;
-	// }
-
+	/* SC call searchMaster() -> call to DB @param IntgCdVO (master)  
+	 * (non-Javadoc)
+	 * @see com.clt.apps.opus.dou.doutraining.codeerrgmgt.basic.INTGCdMgmtBC#searchMaster(com.clt.apps.opus.dou.doutraining.codeerrgmgt.vo.IntgCdVO)
+	 */
 	@Override
 	public List<IntgCdVO> searchMaster(IntgCdVO intgCdVO) throws EventException {
 		try {
-			return dbDao.searchErrMsg(intgCdVO);
+			return dbDao.searchMaster(intgCdVO);
 		} catch (DAOException ex) {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		} catch (Exception ex) {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
 	}
-
+	/**
+	 * 
+	 */
 	@Override
 	public List<IntgCdDtlVO> searchIntgCdDtl(IntgCdDtlVO intgCdDtlVO)
 			throws EventException {
@@ -68,6 +55,8 @@ public class INTGCdMgmtBCImpl extends BasicCommandSupport implements
 		}
 	}
 
+	// manageMaster have 4 ArrayList
+	// 3 list I, U, D master after user request and add list equivalent
 	@Override
 	public void manageMaster(IntgCdVO[] intgCdVO, SignOnUserAccount account)
 			throws EventException {
@@ -79,7 +68,7 @@ public class INTGCdMgmtBCImpl extends BasicCommandSupport implements
 
 			for (int i = 0; i < intgCdVO.length; i++) {
 				if (intgCdVO[i].getIbflag().equals("I")) {
-					 insertVoList.add(intgCdVO[i]);
+					insertVoList.add(intgCdVO[i]);
 
 				} else if (intgCdVO[i].getIbflag().equals("U")) {
 					updateVoList.add(intgCdVO[i]);
@@ -92,17 +81,17 @@ public class INTGCdMgmtBCImpl extends BasicCommandSupport implements
 				intgCdVO[i].setCreUsrId(account.getUsr_id());
 				intgCdVO[i].setUpdUsrId(account.getUsr_id());
 			}
-
+			// if list > 0 DB handle request
 			if (insertVoList.size() > 0) {
-				dbDao.addmanageErrMsgS(insertVoList);
+				dbDao.addmanageMaster(insertVoList);
 			}
 
 			if (updateVoList.size() > 0) {
-				dbDao.modifymanageErrMsgS(updateVoList);
+				dbDao.modifymanageMaster(updateVoList);
 			}
 
 			if (deleteVoList.size() > 0) {
-				dbDao.removemanageErrMsgS(deleteVoList);
+				dbDao.removemanageMaster(deleteVoList);
 				dbDaoDetail.removemanageDetailS(deleteDetailVoList);
 			}
 		} catch (DAOException ex) {
@@ -111,7 +100,9 @@ public class INTGCdMgmtBCImpl extends BasicCommandSupport implements
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
 	}
-
+	/**
+	 * 
+	 */
 	@Override
 	public void manageDetail(IntgCdDtlVO[] detailVO, SignOnUserAccount account)
 			throws EventException {

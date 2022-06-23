@@ -29,8 +29,8 @@ import com.clt.apps.opus.dou.doutraining.codeerrgmgt.vo.IntgCdDtlVO;
 import com.clt.apps.opus.dou.doutraining.codeerrgmgt.vo.IntgCdVO;
 
 /**
- * ALPS-DouTraining Business Logic ServiceCommand - ALPS-DouTraining 대한 비지니스
- * 트랜잭션을 처리한다.
+ * ALPS-DouTraining Business Logic ServiceCommand - Business for
+ * ALPS-DouTraining Process the transaction.
  * 
  * @author Vi Nguyen
  * @see ErrMsgMgmtDBDAO
@@ -42,9 +42,9 @@ public class DouTrainingSC extends ServiceCommandSupport {
 	private SignOnUserAccount account = null;
 
 	/**
-	 * DouTraining system 업무 시나리오 선행작업<br>
-	 * 업무 시나리오 호출시 관련 내부객체 생성<br>
-	 */
+	* DouTraining system task scenario precedent work<br>
+	* Creating related internal objects when calling a business scenario<br>
+	*/
 	public void doStart() {
 		log.debug("DouTrainingSC 시작");
 		try {
@@ -56,16 +56,16 @@ public class DouTrainingSC extends ServiceCommandSupport {
 	}
 
 	/**
-	 * DouTraining system 업무 시나리오 마감작업<br>
-	 * 업무 시나리오 종료시 관련 내부객체 해제<br>
-	 */
+	* DouTraining system work scenario finishing work<br>
+	* Release related internal objects when the work scenario is finished<br>
+	*/
 	public void doEnd() {
 		log.debug("DouTrainingSC 종료");
 	}
 
 	/**
-	 * 각 이벤트에 해당하는 업무 시나리오 수행<br>
-	 * ALPS-DouTraining system 업무에서 발생하는 모든 이벤트의 분기처리<br>
+	 * Carry out business scenarios for each event<br>
+	 * Branch processing of all events occurring in ALPS-DouTraining system work<br>
 	 * 
 	 * @param e
 	 *            Event
@@ -92,14 +92,14 @@ public class DouTrainingSC extends ServiceCommandSupport {
 	}
 
 	/**
-	 * DOU_TRN_001 : [이벤트]<br>
-	 * [비즈니스대상]을 [행위]합니다.<br>
-	 * 
-	 * @param Event
-	 *            e
-	 * @return EventResponse
-	 * @exception EventException
-	 */
+	* DOU_TRN_001 : [Event]<br>
+	* [Act] for [Business Target].<br>
+	*
+	* @param Event
+	* e
+	* @return EventResponse set list master return getList user need SC call BC
+	* @exception EventException
+	*/
 	private EventResponse searchMaster(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
@@ -117,6 +117,14 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		return eventResponse;
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param Event
+	 *            e
+	 * @return EventResponse set list detail return getListDetail user need
+	 * @exception EventException
+	 */
 	private EventResponse searchDetail(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
@@ -136,14 +144,15 @@ public class DouTrainingSC extends ServiceCommandSupport {
 	}
 
 	/**
-	 * DOU_TRN_001 : [이벤트]<br>
-	 * [비즈니스대상]을 [행위]합니다.<br>
-	 *
-	 * @param Event
-	 *            e
-	 * @return EventResponse
-	 * @exception EventException
-	 */
+	* DOU_TRN_001 : [Event]<br>
+	* [Act] for [Business Target].<br>
+	*
+	* @param Event
+	* e
+	* @return EventResponse handle add, update, delete Master
+	*
+	* @exception EventException
+	*/
 	private EventResponse manageMaster(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
@@ -165,6 +174,14 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		return eventResponse;
 	}
 
+	/**
+	 *
+	 * @param Event
+	 *            e
+	 * @return EventResponse handle add, update, delete Detail
+	 *
+	 * @exception EventException
+	 */
 	private EventResponse manageDetail(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();

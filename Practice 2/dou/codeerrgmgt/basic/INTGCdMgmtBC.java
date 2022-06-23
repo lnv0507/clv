@@ -12,11 +12,11 @@ public interface INTGCdMgmtBC {
 
 	public void manageMaster(IntgCdVO[] intgCdVOS, SignOnUserAccount account)
 			throws EventException;
+
 	public void manageDetail(IntgCdDtlVO[] detailVOS, SignOnUserAccount account)
 			throws EventException;
-	// public int checkDuplicated(ErrMsgVO errMsgVO) throws EventException;
 
 	public List<IntgCdDtlVO> searchIntgCdDtl(IntgCdDtlVO intgCđtlVO)
 			throws EventException;
-	
+
 }

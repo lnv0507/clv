@@ -20,8 +20,15 @@ import com.clt.framework.support.db.SQLExecuter;
 import com.clt.framework.support.layer.integration.DBDAOSupport;
 
 public class INTGCdMgMtDBDAO extends DBDAOSupport {
+	
+	/**
+	 * 
+	 * @param intgCdVO
+	 * @return
+	 * @throws DAOException
+	 */
 	@SuppressWarnings("unchecked")
-	public List<IntgCdVO> searchErrMsg(IntgCdVO intgCdVO) throws DAOException {
+	public List<IntgCdVO> searchMaster(IntgCdVO intgCdVO) throws DAOException {
 		DBRowSet dbRowset = null;
 		List<IntgCdVO> list = null;
 		// query parameter
@@ -32,7 +39,6 @@ public class INTGCdMgMtDBDAO extends DBDAOSupport {
 		try {
 			if (intgCdVO != null) {
 				Map<String, String> mapVO = intgCdVO.getColumnValues();
-
 				param.putAll(mapVO);
 				velParam.putAll(mapVO);
 			}
@@ -49,8 +55,13 @@ public class INTGCdMgMtDBDAO extends DBDAOSupport {
 		}
 		return list;
 	}
-
-	public void addmanageErrMsg(IntgCdVO intgCdVO) throws DAOException,
+	/**
+	 * 
+	 * @param intgCdVO
+	 * @throws DAOException
+	 * @throws Exception
+	 */
+	public void addmanageMaster(IntgCdVO intgCdVO) throws DAOException,
 			Exception {
 		// query parameter
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -76,8 +87,14 @@ public class INTGCdMgMtDBDAO extends DBDAOSupport {
 			throw new DAOException(new ErrorHandler(ex).getMessage());
 		}
 	}
-
-	public int modifymanageErrMsg(IntgCdVO intgCdVO) throws DAOException,
+	/**
+	 * 
+	 * @param intgCdVO
+	 * @return
+	 * @throws DAOException
+	 * @throws Exception
+	 */
+	public int modifymanageMaster(IntgCdVO intgCdVO) throws DAOException,
 			Exception {
 		// query parameter
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -106,8 +123,14 @@ public class INTGCdMgMtDBDAO extends DBDAOSupport {
 		}
 		return result;
 	}
-
-	public int removemanageErrMsg(IntgCdVO intgCdVO) throws DAOException,
+	/**
+	 * 
+	 * @param intgCdVO
+	 * @return
+	 * @throws DAOException
+	 * @throws Exception
+	 */
+	public int removemanageMaster(IntgCdVO intgCdVO) throws DAOException,
 			Exception {
 		// query parameter
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -136,8 +159,14 @@ public class INTGCdMgMtDBDAO extends DBDAOSupport {
 		}
 		return result;
 	}
-
-	public int[] addmanageErrMsgS(List<IntgCdVO> intgCdVO) throws DAOException,
+	/**
+	 * 
+	 * @param intgCdVO
+	 * @return
+	 * @throws DAOException
+	 * @throws Exception
+	 */
+	public int[] addmanageMaster(List<IntgCdVO> intgCdVO) throws DAOException,
 			Exception {
 		int insCnt[] = null;
 		try {
@@ -160,8 +189,14 @@ public class INTGCdMgMtDBDAO extends DBDAOSupport {
 		}
 		return insCnt;
 	}
-
-	public int[] modifymanageErrMsgS(List<IntgCdVO> intgCdVO)
+	/**
+	 * 
+	 * @param intgCdVO
+	 * @return
+	 * @throws DAOException
+	 * @throws Exception
+	 */
+	public int[] modifymanageMaster(List<IntgCdVO> intgCdVO)
 			throws DAOException, Exception {
 		int updCnt[] = null;
 		try {
@@ -184,8 +219,14 @@ public class INTGCdMgMtDBDAO extends DBDAOSupport {
 		}
 		return updCnt;
 	}
-
-	public int[] removemanageErrMsgS(List<IntgCdVO> intgCdVO)
+	/**
+	 * 
+	 * @param intgCdVO
+	 * @return
+	 * @throws DAOException
+	 * @throws Exception
+	 */
+	public int[] removemanageMaster(List<IntgCdVO> intgCdVO)
 			throws DAOException, Exception {
 		int delCnt[] = null;
 		try {
@@ -208,42 +249,5 @@ public class INTGCdMgMtDBDAO extends DBDAOSupport {
 		}
 		return delCnt;
 	}
-
-	// public int duplicated(ErrMsgVO errMsgVO) throws DAOException, Exception {
-	// DBRowSet dbRow = null;
-	// // query parameter
-	// Map<String, Object> param = new HashMap<String, Object>();
-	// // velocity parameter
-	// Map<String, Object> velParam = new HashMap<String, Object>();
-	// int result = 0;
-	// try {
-	// Map<String, String> mapVO = errMsgVO.getColumnValues();
-	// param.put("err_msg_cd",errMsgVO.getErrMsgCd());
-	// // put values in mapVO into velParam
-	// // velParam.putAll(mapVO);
-	// // execute queries in ErrMsgMgmtDBDAOErrMsgDuplicateRSQL with param and
-	// velParam
-	// dbRow = new SQLExecuter("").executeQuery((ISQLTemplate)new
-	// INTGCdMgmtDBDAOIngCdDuplicatedRSQL(), param, null);
-	// while (dbRow.next()){
-	// String countE = dbRow.getString(1);
-	// result = Integer.parseInt(countE);
-	// }
-	// }
-	// catch(SQLException se) {
-	// //show error in console with error message
-	// log.error(se.getMessage(),se);
-	// //throw EventException
-	// throw new DAOException(new ErrorHandler(se).getMessage());
-	// } catch(Exception ex) {
-	// //show error in console with error message
-	// log.error(ex.getMessage(),ex);
-	// //throw EventException
-	// throw new DAOException(new ErrorHandler(ex).getMessage());
-	// }
-	//
-	//
-	// return result;
-	// }
 
 }

@@ -11,7 +11,8 @@ SELECT
 ,	INTG_CD_VAL_CTNT
 ,	INTG_CD_ID
 FROM COM_INTG_CD_DTL
-WHERE INTG_CD_ID = @[intg_cd_id]			]]></sql>
+WHERE 0=0
+AND INTG_CD_ID = @[intg_cd_id]			]]></sql>
 			<params>
 				<param name="intg_cd_id" type="12" value="" out="N"/>
 			</params>
