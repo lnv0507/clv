@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CarrierMgmtDBDAOCarrierRSQL">
+			<desc><![CDATA[Select]]></desc>
+			<sql><![CDATA[
+SELECT 
+	MODI_COST_CTR_CD
+,	EDW_UPD_DT
+,	UPD_USR_ID
+,	UPD_DT
+,	CRE_USR_ID
+,	CRE_DT
+,	DELT_FLG
+,	JO_STL_OPT_CD
+,	TRD_CD
+,	CUST_SEQ
+,	CUST_CNT_CD
+,	VNDR_SEQ
+,	RLANE_CD
+,	JO_CRR_CD
+FROM JOO_CARRIER
+			]]></sql>
+			<params>
+			</params>
+		</query>
+	</querys>
+</sqls>

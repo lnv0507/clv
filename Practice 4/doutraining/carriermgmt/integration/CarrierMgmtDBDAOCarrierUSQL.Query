@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CarrierMgmtDBDAOCarrierUSQL">
+			<desc><![CDATA[Update]]></desc>
+			<sql><![CDATA[
+UPDATE JOO_CARRIER SET 
+	MODI_COST_CTR_CD = @[modi_cost_ctr_cd]
+,	sysdate
+,	UPD_USR_ID = @[upd_usr_id]
+,	sysdate
+,	CRE_USR_ID = @[cre_usr_id]
+,	sysdate
+,	DELT_FLG = @[delt_flg]
+,	JO_STL_OPT_CD = @[jo_stl_opt_cd]
+,	TRD_CD = @[trd_cd]
+,	CUST_SEQ = @[cust_seq]
+,	CUST_CNT_CD = @[cust_cnt_cd]
+,	VNDR_SEQ = @[vndr_seq]
+,	RLANE_CD = @[rlane_cd]
+,	JO_CRR_CD = @[jo_crr_cd]
+WHERE	JO_CRR_CD = @[jo_crr_cd]
+			]]></sql>
+			<params>
+				<param name="modi_cost_ctr_cd" type="12" value="" out="N"/>
+				<param name="upd_usr_id" type="12" value="" out="N"/>
+				<param name="cre_usr_id" type="12" value="" out="N"/>
+				<param name="delt_flg" type="12" value="" out="N"/>
+				<param name="jo_stl_opt_cd" type="12" value="" out="N"/>
+				<param name="trd_cd" type="12" value="" out="N"/>
+				<param name="cust_seq" type="2" value="" out="N"/>
+				<param name="cust_cnt_cd" type="12" value="" out="N"/>
+				<param name="vndr_seq" type="2" value="" out="N"/>
+				<param name="rlane_cd" type="12" value="" out="N"/>
+				<param name="jo_crr_cd" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>
