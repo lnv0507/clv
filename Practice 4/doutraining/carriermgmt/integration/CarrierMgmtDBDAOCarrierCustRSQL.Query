@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CarrierMgmtDBDAOCarrierCustRSQL">
+			<desc><![CDATA[Slect]]></desc>
+			<sql><![CDATA[
+select 
+	cust_cnt_cd,
+	cust_seq,
+	cust_lgl_eng_nm,
+	cust_abbr_nm
+from mdm_customer
+where 1 = 1
+#if (${cust_cnt_cd} != '')
+and UPPER(cust_cnt_cd) like UPPER(@[cust_cnt_cd])
+#end
+#if (${cust_seq} != '')
+and UPPER(cust_seq) like UPPER('%'||@[cust_seq]||'%')
+#end			]]></sql>
+			<params>
+				<param name="cust_cnt_cd" type="12" value="" out="N"/>
+				<param name="cust_seq" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CarrierMgmtDBDAOCarrierCrrCdRSQL">
+			<desc><![CDATA[Select Search]]></desc>
+			<sql><![CDATA[
+SELECT CRR_CD AS JO_CRR_CD
+FROM MDM_CARRIER
+WHERE delt_flg = 'N'			]]></sql>
+			<params>
+			</params>
+		</query>
+	</querys>
+</sqls>

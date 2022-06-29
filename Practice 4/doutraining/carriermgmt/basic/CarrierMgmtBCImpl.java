@@ -6,129 +6,153 @@ import java.util.List;
 import org.slf4j.ext.EventException;
 
 import com.clt.apps.opus.dou.doutraining.carriermgmt.integration.CarrierMgmtDBDAO;
-import com.clt.apps.opus.dou.doutraining.carriermgmt.vo.CarrierCdVO;
+import com.clt.apps.opus.dou.doutraining.carriermgmt.vo.CarrierVO;
 import com.clt.framework.component.message.ErrorHandler;
 import com.clt.framework.core.layer.integration.DAOException;
 import com.clt.framework.support.layer.basic.BasicCommandSupport;
 import com.clt.framework.support.view.signon.SignOnUserAccount;
 
-public class CarrierMgmtBCImpl extends BasicCommandSupport implements CarrierMgmtBC {
-	
+public class CarrierMgmtBCImpl extends BasicCommandSupport implements
+		CarrierMgmtBC {
+
 	private transient CarrierMgmtDBDAO dbDao = null;
-	
+
 	public CarrierMgmtBCImpl() {
-		//create DAO object
+		// create DAO object
 		dbDao = new CarrierMgmtDBDAO();
 	}
 
+	/**
+	 * call DBDAO select data
+	 */
 	@Override
-	public List<CarrierCdVO> searchCarrierVO(CarrierCdVO carrierVO) throws EventException {
+	public List<CarrierVO> searchCarrierVO(CarrierVO carrierVO)
+			throws EventException {
 		try {
-			return dbDao.searchMaster(carrierVO);
-		} catch(DAOException ex) {
-			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
+			return dbDao.searchCarrier(carrierVO);
+		} catch (DAOException ex) {
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		} catch (Exception ex) {
-			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
-		}
-	}
-	
-	@Override
-	public List<CarrierCdVO> searchCust(CarrierCdVO carrierVO) throws EventException {
-		try {
-			return dbDao.searchMaster(carrierVO);
-		} catch(DAOException ex) {
-			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
-		} catch (Exception ex) {
-			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
 	}
 
 	@Override
-	public void manageCarrierVO(CarrierCdVO[] carrierVO, SignOnUserAccount account) throws EventException {
+	public void manageCarrierVO(CarrierVO[] carrierVO, SignOnUserAccount account)
+			throws EventException {
 		try {
-			//List needs to be inserted
-			List<CarrierCdVO> insertVoList = new ArrayList<CarrierCdVO>();
-			
-			//List needs to be updated
-			List<CarrierCdVO> updateVoList = new ArrayList<CarrierCdVO>();
-			
-			//List needs to be deleted
-			List<CarrierCdVO> deleteVoList = new ArrayList<CarrierCdVO>();
-			
-			//Invalid code message
-			StringBuilder invalidData=new StringBuilder();
-			
-			//loop through errMsgVO and base on IbFlag to perform corresponding action
-			for ( int i=0; i<carrierVO.length; i++ ) {
-				
-				//Insert
-				if ( carrierVO[i].getIbflag().equals("I")){
-					//Condition need to check before inserting
-					CarrierCdVO condition = new CarrierCdVO();
-					//set message code for condition
-//					condition.setIntgCdId(carrierVO[i].getIntgCdId());
-					condition.setJoCrrCd(carrierVO[i].getJoCrrCd());
-					condition.setRlaneCd(carrierVO[i].getRlaneCd());
-					//if message code don't exist
-					if(searchCarrierVO(condition).size()==0){
-						//set CreUsrId is current user id
-						carrierVO[i].setCreUsrId(account.getUsr_id());
-						
-						//set UpdUsrId is current user id
-						carrierVO[i].setUpdUsrId(account.getUsr_id());
-						
-						//add to inserting list
-						insertVoList.add(carrierVO[i]);
-					}else{
-						//if message code already existed
-						//append invalid message code to invalidMsgCds variable
-						invalidData.append(carrierVO[i].getJoCrrCd()+"-"+carrierVO[i].getRlaneCd()+"|");
-					}
-				} else if (carrierVO[i].getIbflag().equals("U")){
-					//Update
-					//set UpdUsrId is current user id
+			// List needs to be inserted
+			List<CarrierVO> insertVoList = new ArrayList<CarrierVO>();
+
+			// List needs to be updated
+			List<CarrierVO> updateVoList = new ArrayList<CarrierVO>();
+
+			// List needs to be deleted
+			List<CarrierVO> deleteVoList = new ArrayList<CarrierVO>();
+
+			// Invalid code message
+			StringBuilder invalidData = new StringBuilder();
+			String listDuplicate = "";
+			// loop through carrierVO and base on IbFlag to perform corresponding
+			// action
+			for (int i = 0; i < carrierVO.length; i++) {
+
+				// Insert
+				if (carrierVO[i].getIbflag().equals("I")) {
+					carrierVO[i].setCreUsrId(account.getUsr_id());
 					carrierVO[i].setUpdUsrId(account.getUsr_id());
-					
-					//add to updating list
+					if (!dbDao.checkDuplicate(carrierVO[i])) {
+						listDuplicate += carrierVO[i].getJoCrrCd()
+								+ carrierVO[i].getRlaneCd();
+						listDuplicate += ",";
+					}
+					insertVoList.add(carrierVO[i]);
+				} else if (carrierVO[i].getIbflag().equals("U")) {
+					// Update
+					// set UpdUsrId is current user id
+					carrierVO[i].setUpdUsrId(account.getUsr_id());
+
+					// add to updating list
 					updateVoList.add(carrierVO[i]);
-				} else if ( carrierVO[i].getIbflag().equals("D")){
-//					CodeDetailVO codeDetailVO = new CodeDetailVO();
-//					codeDetailVO.setIntgCdId(carrierVO[i].getIntgCdId());
+				} else if (carrierVO[i].getIbflag().equals("D")) {
 					deleteVoList.add(carrierVO[i]);
 				}
 			}
-			
-			//if we have invalid data( because message code already existed)
-			if(invalidData.length()!=0){
-				//remove "|" at the end
-				invalidData.deleteCharAt(invalidData.length()-1);
-				//throw new EventException 
-				throw new EventException(new ErrorHandler("ERR12356", new String[]{invalidData.toString()}).getMessage());
+
+			// if we have invalid data( because message code already existed)
+			if (invalidData.length() != 0) {
+				// remove "|" at the end
+				invalidData.deleteCharAt(invalidData.length() - 1);
+				// throw new EventException
+				throw new EventException(new ErrorHandler("ERR12356",
+						new String[] { invalidData.toString() }).getMessage());
 			}
-			
-			//if inserting list isn't empty
-			if ( insertVoList.size() > 0 ) {
-				dbDao.addmanageMaster(insertVoList);
+
+			// if inserting list isn't empty
+			if (insertVoList.size() > 0) {
+				dbDao.addmanageCarrier(insertVoList);
 			}
-			
-			//if updating list isn't empty
-			if ( updateVoList.size() > 0 ) {
-				dbDao.modifymanageMaster(updateVoList);
+
+			// if updating list isn't empty
+			if (updateVoList.size() > 0) {
+				dbDao.modifymanageCarrier(updateVoList);
 			}
-//			
-//			//if deleting list isn't empty
-			if ( deleteVoList.size() > 0 ) {
-				dbDao.removemanageMaster(deleteVoList);
+			// if deleting list isn't empty
+			if (deleteVoList.size() > 0) {
+				dbDao.removemanageCarrier(deleteVoList);
 			}
-		} catch(DAOException ex) {
+		} catch (DAOException ex) {
 			// throw new EventException if we have DAOException
-			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		} catch (Exception ex) {
-			//other exception
-			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
+			// other exception
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
-		
+
 	}
 
+	@Override
+	public List<CarrierVO> getCrrCds() throws EventException {
+		// TODO Auto-generated method stub
+		try {
+			return dbDao.getCrrCds();
+		} catch (DAOException ex) {
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
+		} catch (Exception ex) {
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
+		}
+	}
 
+	@Override
+	public List<CarrierVO> getLnCds() throws EventException {
+		// TODO Auto-generated method stub
+		try {
+			return dbDao.getLnCds();
+		} catch (DAOException ex) {
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
+		} catch (Exception ex) {
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
+		}
+	}
+
+	@Override
+	public List<CarrierVO> searchCus(CarrierVO carrierVO) throws EventException {
+		// TODO Auto-generated method stub
+		try {
+			return dbDao.searchCusPop(carrierVO);
+		} catch (DAOException ex) {
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
+		} catch (Exception ex) {
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
+		}
+	}
+
+	@Override
+	public boolean checkDuplicate(CarrierVO carrierVO) {
+		// if duplicate show message on client
+		if (dbDao.checkDuplicate(carrierVO) == false) {
+			throw new EventException(new ErrorHandler("ERR00001").getMessage());
+		}
+		return dbDao.checkDuplicate(carrierVO);
+	}
 }

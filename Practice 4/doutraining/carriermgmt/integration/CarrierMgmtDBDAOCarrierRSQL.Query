@@ -5,23 +5,48 @@
 			<desc><![CDATA[Select]]></desc>
 			<sql><![CDATA[
 SELECT 
-	MODI_COST_CTR_CD
-,	EDW_UPD_DT
-,	UPD_USR_ID
-,	UPD_DT
-,	CRE_USR_ID
-,	CRE_DT
-,	DELT_FLG
-,	JO_STL_OPT_CD
-,	TRD_CD
-,	CUST_SEQ
-,	CUST_CNT_CD
-,	VNDR_SEQ
+	JO_CRR_CD
 ,	RLANE_CD
-,	JO_CRR_CD
+,	VNDR_SEQ
+,	CUST_CNT_CD
+,	CUST_SEQ
+,	TRD_CD
+,	DELT_FLG
+, 	TO_CHAR(CRE_DT, 'YYYY/MM/DD HH24:MI:SS') AS CRE_DT	
+,	CRE_USR_ID
+, 	TO_CHAR(UPD_DT, 'YYYY/MM/DD HH24:MI:SS') AS UPD_DT	
+,	UPD_USR_ID
 FROM JOO_CARRIER
-			]]></sql>
+WHERE 1 = 1
+#if(${jo_crr_cd} != '' && ${jo_crr_cd} != 'All')
+	AND JO_CRR_CD IN (
+			#foreach($jo_cd in ${array1})
+				#if($velocityCount < $array1.size())
+					'$jo_cd',
+				#else
+					'$jo_cd'
+				#end
+			
+			#end
+)
+#end
+#if(${vndr_seq} != '')
+	AND VNDR_SEQ LIKE '%' ||@[vndr_seq] || '%'
+#end
+#if (${date_fr} != '')
+    AND CRE_DT >= to_date(@[date_fr],'YYYY-MM-DD')
+#end	
+#if (${date_to} != '')
+    AND UPD_DT <= to_date(@[date_to],'YYYY-MM-DD')
+#end			
+#if (${rlane_cd} != '')
+and rlane_cd like @[rlane_cd]
+#end			]]></sql>
 			<params>
+				<param name="vndr_seq" type="12" value="" out="N"/>
+				<param name="date_fr" type="12" value="" out="N"/>
+				<param name="date_to" type="12" value="" out="N"/>
+				<param name="rlane_cd" type="12" value="" out="N"/>
 			</params>
 		</query>
 	</querys>

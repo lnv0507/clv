@@ -7,7 +7,7 @@
 UPDATE JOO_CARRIER SET 
 	MODI_COST_CTR_CD = @[modi_cost_ctr_cd]
 ,	sysdate
-,	UPD_USR_ID = @[upd_usr_id]
+,	UPD_USR_ID = @[cre_usr_id]
 ,	sysdate
 ,	CRE_USR_ID = @[cre_usr_id]
 ,	sysdate
@@ -18,12 +18,9 @@ UPDATE JOO_CARRIER SET
 ,	CUST_CNT_CD = @[cust_cnt_cd]
 ,	VNDR_SEQ = @[vndr_seq]
 ,	RLANE_CD = @[rlane_cd]
-,	JO_CRR_CD = @[jo_crr_cd]
-WHERE	JO_CRR_CD = @[jo_crr_cd]
-			]]></sql>
+WHERE	JO_CRR_CD = @[jo_crr_cd]			]]></sql>
 			<params>
 				<param name="modi_cost_ctr_cd" type="12" value="" out="N"/>
-				<param name="upd_usr_id" type="12" value="" out="N"/>
 				<param name="cre_usr_id" type="12" value="" out="N"/>
 				<param name="delt_flg" type="12" value="" out="N"/>
 				<param name="jo_stl_opt_cd" type="12" value="" out="N"/>

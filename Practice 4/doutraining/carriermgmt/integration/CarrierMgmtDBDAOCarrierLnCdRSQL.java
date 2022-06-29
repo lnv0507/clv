@@ -1,13 +1,13 @@
 /*=========================================================
  *Copyright(c) 2022 CyberLogitec
- *@FileName : CarrierMgmtDBDAOCarrierDSQL.java
+ *@FileName : CarrierMgmtDBDAOCarrierLnCdRSQL.java
  *@FileTitle : 
  *Open Issues :
  *Change history :
- *@LastModifyDate : 2022.06.23
+ *@LastModifyDate : 2022.06.27
  *@LastModifier : 
  *@LastVersion : 1.0
- * 2022.06.23 
+ * 2022.06.27 
  * 1.0 Creation
 =========================================================*/
 package com.clt.apps.opus.dou.doutraining.carriermgmt.integration;
@@ -23,7 +23,7 @@ import com.clt.framework.support.db.ISQLTemplate;
  * @since J2EE 1.6
  */
 
-public class CarrierMgmtDBDAOCarrierDSQL implements ISQLTemplate {
+public class CarrierMgmtDBDAOCarrierLnCdRSQL implements ISQLTemplate {
 
 	private StringBuffer query = new StringBuffer();
 
@@ -34,26 +34,17 @@ public class CarrierMgmtDBDAOCarrierDSQL implements ISQLTemplate {
 
 	/**
 	 * <pre>
-	 * Delete
+	 * Slect
 	 * </pre>
 	 */
-	public CarrierMgmtDBDAOCarrierDSQL() {
+	public CarrierMgmtDBDAOCarrierLnCdRSQL() {
 		setQuery();
 		params = new HashMap<String, String[]>();
-		String tmp = null;
-		String[] arrTmp = null;
-		tmp = java.sql.Types.VARCHAR + ",N";
-		arrTmp = tmp.split(",");
-		if (arrTmp.length != 2) {
-			throw new IllegalArgumentException();
-		}
-		params.put("jo_crr_cd", new String[] { arrTmp[0], arrTmp[1] });
-
 		query.append("/*").append("\n");
 		query.append(
 				"Path : com.clt.apps.opus.dou.doutraining.carriermgmt.integration ")
 				.append("\n");
-		query.append("FileName : CarrierMgmtDBDAOCarrierDSQL").append("\n");
+		query.append("FileName : CarrierMgmtDBDAOCarrierLnCdRSQL").append("\n");
 		query.append("*/").append("\n");
 	}
 
@@ -69,8 +60,9 @@ public class CarrierMgmtDBDAOCarrierDSQL implements ISQLTemplate {
 	 * Query 생성
 	 */
 	public void setQuery() {
-		query.append("DELETE FROM JOO_CARRIER").append("\n");
-		query.append("WHERE	JO_CRR_CD = @[jo_crr_cd]").append("\n");
+		query.append("select vsl_slan_cd as rlane_cd").append("\n");
+		query.append("from mdm_rev_lane").append("\n");
+		query.append("WHERE delt_flg = 'N'	").append("\n");
 
 	}
 }
