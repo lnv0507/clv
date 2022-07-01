@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="InvoiceDBDAOInvoiceLaneRSQL">
+			<desc><![CDATA[SelectLane]]></desc>
+			<sql><![CDATA[
+select 
+	distinct(rlane_cd)
+from joo_carrier
+where jo_crr_cd IN (
+	#foreach($key IN ${obj_list_no}) #if($velocityCount < $obj_list_no.size()) '$key', #else '$key' #end #end)			]]></sql>
+			<params>
+			</params>
+		</query>
+	</querys>
+</sqls>

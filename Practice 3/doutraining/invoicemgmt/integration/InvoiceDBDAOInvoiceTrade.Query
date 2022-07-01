@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="InvoiceDBDAOInvoiceTrade">
+			<desc><![CDATA[Select]]></desc>
+			<sql><![CDATA[
+SELECT 
+	distinct(trd_cd),
+	jo_crr_cd,
+	rlane_cd
+FROM joo_carrier
+WHERE rlane_cd = @[rlane_cd]
+AND jo_crr_cd IN (
+	#foreach($key IN ${obj_list_no}) #if($velocityCount < $obj_list_no.size()) '$key', #else '$key' #end #end)				]]></sql>
+			<params>
+				<param name="rlane_cd" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>
