@@ -1,6 +1,7 @@
 package com.clt.apps.opus.dou.doutraining.invoicemgmt.event;
 
 import com.clt.apps.opus.dou.doutraining.invoicemgmt.vo.InvoiceCarrierVO;
+import com.clt.apps.opus.dou.doutraining.invoicemgmt.vo.InvoiceDetailVO;
 import com.clt.apps.opus.dou.doutraining.invoicemgmt.vo.InvoiceTradeVO;
 import com.clt.apps.opus.dou.doutraining.invoicemgmt.vo.InvoiceVO;
 import com.clt.framework.support.layer.event.EventSupport;
@@ -11,6 +12,25 @@ public class ClvTrn0003Event extends EventSupport {
 	InvoiceVO[] invoiceVOs = null;
 	InvoiceTradeVO invoiceTradeVO = null;
 	InvoiceCarrierVO invoiceCarrierVO = null;
+	InvoiceDetailVO invoiceDetailVO = null;
+	String loadComboBox = null;
+
+	public String getLoadComboBox() {
+		return loadComboBox;
+	}
+
+	public void setLoadComboBox(String loadComboBox) {
+		this.loadComboBox = loadComboBox;
+	}
+
+	public InvoiceDetailVO getInvoiceDetailVO() {
+		return invoiceDetailVO;
+	}
+
+	public void setInvoiceDetailVO(InvoiceDetailVO invoiceDetailVO) {
+		this.invoiceDetailVO = invoiceDetailVO;
+	}
+
 	public InvoiceCarrierVO getInvoiceCarrierVO() {
 		return invoiceCarrierVO;
 	}
@@ -26,6 +46,7 @@ public class ClvTrn0003Event extends EventSupport {
 	public void setInvoiceTradeVO(InvoiceTradeVO invoiceTradeVO) {
 		this.invoiceTradeVO = invoiceTradeVO;
 	}
+
 	public ClvTrn0003Event() {
 
 	}
@@ -45,5 +66,5 @@ public class ClvTrn0003Event extends EventSupport {
 	public void setInvoiceVOs(InvoiceVO[] invoiceVOs) {
 		this.invoiceVOs = invoiceVOs;
 	}
-	
+
 }

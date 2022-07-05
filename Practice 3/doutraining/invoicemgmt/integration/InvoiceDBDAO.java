@@ -21,8 +21,7 @@ import com.clt.framework.support.layer.integration.DBDAOSupport;
 public class InvoiceDBDAO extends DBDAOSupport {
 	@SuppressWarnings("unchecked")
 	public List<InvoiceVO> searchInvoiceVO(InvoiceCarrierVO invoiceCarrierVO,
-			ArrayList<String> invoiceList)
-			throws DAOException {
+			ArrayList<String> invoiceList) throws DAOException {
 		DBRowSet dbRowset = null;
 		List<InvoiceVO> list = null;
 		// query parameter
@@ -31,20 +30,22 @@ public class InvoiceDBDAO extends DBDAOSupport {
 		Map<String, Object> velParam = new HashMap<String, Object>();
 
 		try {
-			if(invoiceCarrierVO != null){
-				Map<String, String> mapVO = invoiceCarrierVO .getColumnValues();
-			
+			if (invoiceCarrierVO != null) {
+				Map<String, String> mapVO = invoiceCarrierVO.getColumnValues();
+
 				param.putAll(mapVO);
 				velParam.putAll(mapVO);
 			}
-			if(!"ALL".equals(invoiceCarrierVO.getJoCrrCd())){
+			if (!"ALL".equals(invoiceCarrierVO.getJoCrrCd())) {
 				velParam.put("jo_crr_cds", invoiceList);
 				param.put("jo_crr_cds", "ALL");
-			}else{
+			} else {
 				velParam.put("jo_crr_cds", "ALL");
 				param.put("jo_crr_cds", "ALL");
 			}
-			dbRowset = new SQLExecuter("").executeQuery((ISQLTemplate) new InvoiceDBDAOInvoiceRSQL(),param, velParam);
+			dbRowset = new SQLExecuter("").executeQuery(
+					(ISQLTemplate) new InvoiceDBDAOInvoiceRSQL(), param,
+					velParam);
 			list = (List) RowSetUtil.rowSetToVOs(dbRowset, InvoiceVO.class);
 		} catch (SQLException se) {
 			log.error(se.getMessage(), se);
@@ -116,8 +117,8 @@ public class InvoiceDBDAO extends DBDAOSupport {
 			}
 			param.put("rlane_cd", rlane);
 			dbRowset = new SQLExecuter("").executeQuery(
-					(ISQLTemplate) new InvoiceDBDAOInvoiceTradeDAORSQL(),
-					param, velParam);
+					(ISQLTemplate) new InvoiceDBDAOInvoiceTradeRSQL(), param,
+					velParam);
 			list = (List) RowSetUtil
 					.rowSetToVOs(dbRowset, InvoiceTradeVO.class);
 		} catch (SQLException se) {
@@ -170,4 +171,39 @@ public class InvoiceDBDAO extends DBDAOSupport {
 		return list;
 	}
 
+	public DBRowSet searchDown2Excel(InvoiceDetailVO invoiceDetailVO)
+			throws DAOException {
+		DBRowSet dbRowset = null;
+		// query parameter
+		Map<String, Object> param = new HashMap<String, Object>();
+		// velocity parameter
+		Map<String, Object> velParam = new HashMap<String, Object>();
+		try {
+			if (invoiceDetailVO != null) {
+				Map<String, String> mapVO = invoiceDetailVO.getColumnValues();
+				List<String> jo_crr_cds = new ArrayList<>();
+				if (null != invoiceDetailVO.getJoCrrCd()) {
+					String[] partners = invoiceDetailVO.getJoCrrCd().split(",");
+					for (int i = 0; i < partners.length; i++) {
+						jo_crr_cds.add(partners[i]);
+					}
+					param.putAll(mapVO);
+					param.put("jo_crr_cds", jo_crr_cds);
+
+					velParam.putAll(mapVO);
+					velParam.put("jo_crr_cds", jo_crr_cds);
+				}
+			}
+			dbRowset = new SQLExecuter("").executeQuery(
+					(ISQLTemplate) new InvoiceDBDAOInvoiceDetailRSQL(), param,
+					velParam);
+		} catch (SQLException se) {
+			log.error(se.getMessage(), se);
+			throw new DAOException(new ErrorHandler(se).getMessage());
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+			throw new DAOException(new ErrorHandler(ex).getMessage());
+		}
+		return dbRowset;
+	}
 }

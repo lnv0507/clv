@@ -1,19 +1,18 @@
 /*=========================================================
-*Copyright(c) 2022 CyberLogitec
-*@FileName : InvoiceDetailVO.java
-*@FileTitle : InvoiceDetailVO
-*Open Issues :
-*Change history :
-*@LastModifyDate : 2022.06.29
-*@LastModifier : 
-*@LastVersion : 1.0
-* 2022.06.29  
-* 1.0 Creation
+ *Copyright(c) 2022 CyberLogitec
+ *@FileName : InvoiceDetailVO.java
+ *@FileTitle : InvoiceDetailVO
+ *Open Issues :
+ *Change history :
+ *@LastModifyDate : 2022.06.29
+ *@LastModifier : 
+ *@LastVersion : 1.0
+ * 2022.06.29  
+ * 1.0 Creation
 =========================================================*/
 
 package com.clt.apps.opus.dou.doutraining.invoicemgmt.vo;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,7 +30,7 @@ import com.clt.framework.component.util.JSPUtil;
  * Table Value Ojbect<br>
  * 관련 Event 에서 생성, 서버실행요청시 Data 전달역할을 수행하는 Value Object
  *
- * @author 
+ * @author
  * @since J2EE 1.6
  * @see AbstractValueObject
  */
@@ -39,9 +38,9 @@ import com.clt.framework.component.util.JSPUtil;
 public class InvoiceDetailVO extends AbstractValueObject {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Collection<InvoiceDetailVO> models = new ArrayList<InvoiceDetailVO>();
-	
+
 	/* Column Info */
 	private String csrNo = null;
 	/* Column Info */
@@ -74,16 +73,28 @@ public class InvoiceDetailVO extends AbstractValueObject {
 	private String prnrRefNo = null;
 	/* Column Info */
 	private String aproFlg = null;
+	/* Column Info */
+	private String acctYrmonFr = null;
+	/* Column Info */
+	private String acctYrmonTo = null;
+	/* Column Info */
+	private String trdCd = null;
 
-	/*	테이블 컬럼의 값을 저장하는 Hashtable */
+	/* 테이블 컬럼의 값을 저장하는 Hashtable */
 	private HashMap<String, String> hashColumns = new LinkedHashMap<String, String>();
 
-	/*	테이블 컬럼에 대응되는 멤버변수를 저장하는 Hashtable */
+	/* 테이블 컬럼에 대응되는 멤버변수를 저장하는 Hashtable */
 	private HashMap<String, String> hashFields = new LinkedHashMap<String, String>();
-	
-	public InvoiceDetailVO() {}
 
-	public InvoiceDetailVO(String ibflag, String pagerows, String joCrrCd, String rlaneCd, String loclCurrCd, String invNo, String csrNo, String aproFlg, String custVndrCntCd, String custVndrSeq, String prnrRefNo, String custVndrEngNm, String invRevActAmt, String invExpActAmt, String revExp, String item) {
+	public InvoiceDetailVO() {
+	}
+
+	public InvoiceDetailVO(String ibflag, String pagerows, String joCrrCd,
+			String rlaneCd, String loclCurrCd, String invNo, String csrNo,
+			String aproFlg, String custVndrCntCd, String custVndrSeq,
+			String prnrRefNo, String custVndrEngNm, String invRevActAmt,
+			String invExpActAmt, String revExp, String item,
+			String acctYrmonFr, String acctYrmonTo, String trdCd) {
 		this.csrNo = csrNo;
 		this.invRevActAmt = invRevActAmt;
 		this.loclCurrCd = loclCurrCd;
@@ -100,13 +111,17 @@ public class InvoiceDetailVO extends AbstractValueObject {
 		this.item = item;
 		this.prnrRefNo = prnrRefNo;
 		this.aproFlg = aproFlg;
+		this.acctYrmonFr = acctYrmonFr;
+		this.acctYrmonTo = acctYrmonTo;
+		this.trdCd = trdCd;
 	}
-	
+
 	/**
 	 * 테이블 컬럼에 저장할 값을 Hashtable<"column_name", "value"> 로 반환
+	 * 
 	 * @return HashMap
 	 */
-	public HashMap<String, String> getColumnValues(){
+	public HashMap<String, String> getColumnValues() {
 		this.hashColumns.put("csr_no", getCsrNo());
 		this.hashColumns.put("inv_rev_act_amt", getInvRevActAmt());
 		this.hashColumns.put("locl_curr_cd", getLoclCurrCd());
@@ -123,14 +138,18 @@ public class InvoiceDetailVO extends AbstractValueObject {
 		this.hashColumns.put("item", getItem());
 		this.hashColumns.put("prnr_ref_no", getPrnrRefNo());
 		this.hashColumns.put("apro_flg", getAproFlg());
+		this.hashColumns.put("acct_yrmon_fr", getAcctYrmonFr());
+		this.hashColumns.put("acct_yrmon_to", getAcctYrmonTo());
+		this.hashColumns.put("trd_cd", getTrdCd());
 		return this.hashColumns;
 	}
-	
+
 	/**
-	 * 컬럼명에 대응되는 멤버변수명을 저장하여 Hashtable<"column_name", "variable"> 로 반환   
+	 * 컬럼명에 대응되는 멤버변수명을 저장하여 Hashtable<"column_name", "variable"> 로 반환
+	 * 
 	 * @return
 	 */
-	public HashMap<String, String> getFieldNames(){
+	public HashMap<String, String> getFieldNames() {
 		this.hashFields.put("csr_no", "csrNo");
 		this.hashFields.put("inv_rev_act_amt", "invRevActAmt");
 		this.hashFields.put("locl_curr_cd", "loclCurrCd");
@@ -147,299 +166,369 @@ public class InvoiceDetailVO extends AbstractValueObject {
 		this.hashFields.put("item", "item");
 		this.hashFields.put("prnr_ref_no", "prnrRefNo");
 		this.hashFields.put("apro_flg", "aproFlg");
+		this.hashFields.put("acct_yrmon_fr", "acctYrmonFr");
+		this.hashFields.put("acct_yrmon_to", "acctYrmonTo");
+		this.hashFields.put("trd_cd", "trdCd");
 		return this.hashFields;
 	}
-	
+
+	public String getAcctYrmonFr() {
+		return acctYrmonFr;
+	}
+
+	public void setAcctYrmonFr(String acctYrmonFr) {
+		this.acctYrmonFr = acctYrmonFr;
+	}
+
+	public String getAcctYrmonTo() {
+		return acctYrmonTo;
+	}
+
+	public void setAcctYrmonTo(String acctYrmonTo) {
+		this.acctYrmonTo = acctYrmonTo;
+	}
+
+	public String getTrdCd() {
+		return trdCd;
+	}
+
+	public void setTrdCd(String trdCd) {
+		this.trdCd = trdCd;
+	}
+
 	/**
 	 * Column Info
+	 * 
 	 * @return csrNo
 	 */
 	public String getCsrNo() {
 		return this.csrNo;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return invRevActAmt
 	 */
 	public String getInvRevActAmt() {
 		return this.invRevActAmt;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return loclCurrCd
 	 */
 	public String getLoclCurrCd() {
 		return this.loclCurrCd;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return custVndrSeq
 	 */
 	public String getCustVndrSeq() {
 		return this.custVndrSeq;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return joCrrCd
 	 */
 	public String getJoCrrCd() {
 		return this.joCrrCd;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return rlaneCd
 	 */
 	public String getRlaneCd() {
 		return this.rlaneCd;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return revExp
 	 */
 	public String getRevExp() {
 		return this.revExp;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return custVndrCntCd
 	 */
 	public String getCustVndrCntCd() {
 		return this.custVndrCntCd;
 	}
-	
+
 	/**
 	 * Page Number
+	 * 
 	 * @return pagerows
 	 */
 	public String getPagerows() {
 		return this.pagerows;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return invNo
 	 */
 	public String getInvNo() {
 		return this.invNo;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return custVndrEngNm
 	 */
 	public String getCustVndrEngNm() {
 		return this.custVndrEngNm;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return invExpActAmt
 	 */
 	public String getInvExpActAmt() {
 		return this.invExpActAmt;
 	}
-	
+
 	/**
 	 * VO Data Value( C:Creation, U:Update, D:Delete )
+	 * 
 	 * @return ibflag
 	 */
 	public String getIbflag() {
 		return this.ibflag;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return item
 	 */
 	public String getItem() {
 		return this.item;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return prnrRefNo
 	 */
 	public String getPrnrRefNo() {
 		return this.prnrRefNo;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @return aproFlg
 	 */
 	public String getAproFlg() {
 		return this.aproFlg;
 	}
-	
 
 	/**
 	 * Column Info
+	 * 
 	 * @param csrNo
 	 */
 	public void setCsrNo(String csrNo) {
 		this.csrNo = csrNo;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param invRevActAmt
 	 */
 	public void setInvRevActAmt(String invRevActAmt) {
 		this.invRevActAmt = invRevActAmt;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param loclCurrCd
 	 */
 	public void setLoclCurrCd(String loclCurrCd) {
 		this.loclCurrCd = loclCurrCd;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param custVndrSeq
 	 */
 	public void setCustVndrSeq(String custVndrSeq) {
 		this.custVndrSeq = custVndrSeq;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param joCrrCd
 	 */
 	public void setJoCrrCd(String joCrrCd) {
 		this.joCrrCd = joCrrCd;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param rlaneCd
 	 */
 	public void setRlaneCd(String rlaneCd) {
 		this.rlaneCd = rlaneCd;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param revExp
 	 */
 	public void setRevExp(String revExp) {
 		this.revExp = revExp;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param custVndrCntCd
 	 */
 	public void setCustVndrCntCd(String custVndrCntCd) {
 		this.custVndrCntCd = custVndrCntCd;
 	}
-	
+
 	/**
 	 * Page Number
+	 * 
 	 * @param pagerows
 	 */
 	public void setPagerows(String pagerows) {
 		this.pagerows = pagerows;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param invNo
 	 */
 	public void setInvNo(String invNo) {
 		this.invNo = invNo;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param custVndrEngNm
 	 */
 	public void setCustVndrEngNm(String custVndrEngNm) {
 		this.custVndrEngNm = custVndrEngNm;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param invExpActAmt
 	 */
 	public void setInvExpActAmt(String invExpActAmt) {
 		this.invExpActAmt = invExpActAmt;
 	}
-	
+
 	/**
 	 * VO Data Value( C:Creation, U:Update, D:Delete )
+	 * 
 	 * @param ibflag
 	 */
 	public void setIbflag(String ibflag) {
 		this.ibflag = ibflag;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param item
 	 */
 	public void setItem(String item) {
 		this.item = item;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param prnrRefNo
 	 */
 	public void setPrnrRefNo(String prnrRefNo) {
 		this.prnrRefNo = prnrRefNo;
 	}
-	
+
 	/**
 	 * Column Info
+	 * 
 	 * @param aproFlg
 	 */
 	public void setAproFlg(String aproFlg) {
 		this.aproFlg = aproFlg;
 	}
-	
-/**
+
+	/**
 	 * Request 의 데이터를 추출하여 VO 의 멤버변수에 설정.
+	 * 
 	 * @param request
 	 */
 	public void fromRequest(HttpServletRequest request) {
-		fromRequest(request,"");
+		fromRequest(request, "");
 	}
 
 	/**
 	 * Request 의 데이터를 추출하여 VO 의 멤버변수에 설정.
+	 * 
 	 * @param request
 	 */
 	public void fromRequest(HttpServletRequest request, String prefix) {
 		setCsrNo(JSPUtil.getParameter(request, prefix + "csr_no", ""));
-		setInvRevActAmt(JSPUtil.getParameter(request, prefix + "inv_rev_act_amt", ""));
-		setLoclCurrCd(JSPUtil.getParameter(request, prefix + "locl_curr_cd", ""));
-		setCustVndrSeq(JSPUtil.getParameter(request, prefix + "cust_vndr_seq", ""));
+		setInvRevActAmt(JSPUtil.getParameter(request, prefix
+				+ "inv_rev_act_amt", ""));
+		setLoclCurrCd(JSPUtil
+				.getParameter(request, prefix + "locl_curr_cd", ""));
+		setCustVndrSeq(JSPUtil.getParameter(request, prefix + "cust_vndr_seq",
+				""));
 		setJoCrrCd(JSPUtil.getParameter(request, prefix + "jo_crr_cd", ""));
 		setRlaneCd(JSPUtil.getParameter(request, prefix + "rlane_cd", ""));
 		setRevExp(JSPUtil.getParameter(request, prefix + "rev_exp", ""));
-		setCustVndrCntCd(JSPUtil.getParameter(request, prefix + "cust_vndr_cnt_cd", ""));
+		setCustVndrCntCd(JSPUtil.getParameter(request, prefix
+				+ "cust_vndr_cnt_cd", ""));
 		setPagerows(JSPUtil.getParameter(request, prefix + "pagerows", ""));
 		setInvNo(JSPUtil.getParameter(request, prefix + "inv_no", ""));
-		setCustVndrEngNm(JSPUtil.getParameter(request, prefix + "cust_vndr_eng_nm", ""));
-		setInvExpActAmt(JSPUtil.getParameter(request, prefix + "inv_exp_act_amt", ""));
+		setCustVndrEngNm(JSPUtil.getParameter(request, prefix
+				+ "cust_vndr_eng_nm", ""));
+		setInvExpActAmt(JSPUtil.getParameter(request, prefix
+				+ "inv_exp_act_amt", ""));
 		setIbflag(JSPUtil.getParameter(request, prefix + "ibflag", ""));
 		setItem(JSPUtil.getParameter(request, prefix + "item", ""));
 		setPrnrRefNo(JSPUtil.getParameter(request, prefix + "prnr_ref_no", ""));
 		setAproFlg(JSPUtil.getParameter(request, prefix + "apro_flg", ""));
+		setAproFlg(JSPUtil.getParameter(request, prefix + "acct_yrmon_fr", ""));
+		setAproFlg(JSPUtil.getParameter(request, prefix + "acct_yrmon_to", ""));
+		setAproFlg(JSPUtil.getParameter(request, prefix + "trd_cd", ""));
 	}
 
 	/**
 	 * Request 의 데이터를 VO 배열로 변환하여 반환.
+	 * 
 	 * @param request
 	 * @return InvoiceDetailVO[]
 	 */
@@ -448,38 +537,62 @@ public class InvoiceDetailVO extends AbstractValueObject {
 	}
 
 	/**
-	 * Request 넘어온 여러 건 DATA를 VO Class 에 담는다. 
+	 * Request 넘어온 여러 건 DATA를 VO Class 에 담는다.
+	 * 
 	 * @param request
 	 * @param prefix
 	 * @return InvoiceDetailVO[]
 	 */
-	public InvoiceDetailVO[] fromRequestGrid(HttpServletRequest request, String prefix) {
+	public InvoiceDetailVO[] fromRequestGrid(HttpServletRequest request,
+			String prefix) {
 		InvoiceDetailVO model = null;
-		
-		String[] tmp = request.getParameterValues(prefix + "ibflag");
-  		if(tmp == null)
-   			return null;
 
-  		int length = request.getParameterValues(prefix + "ibflag").length;
-  
+		String[] tmp = request.getParameterValues(prefix + "ibflag");
+		if (tmp == null)
+			return null;
+
+		int length = request.getParameterValues(prefix + "ibflag").length;
+
 		try {
-			String[] csrNo = (JSPUtil.getParameter(request, prefix	+ "csr_no", length));
-			String[] invRevActAmt = (JSPUtil.getParameter(request, prefix	+ "inv_rev_act_amt", length));
-			String[] loclCurrCd = (JSPUtil.getParameter(request, prefix	+ "locl_curr_cd", length));
-			String[] custVndrSeq = (JSPUtil.getParameter(request, prefix	+ "cust_vndr_seq", length));
-			String[] joCrrCd = (JSPUtil.getParameter(request, prefix	+ "jo_crr_cd", length));
-			String[] rlaneCd = (JSPUtil.getParameter(request, prefix	+ "rlane_cd", length));
-			String[] revExp = (JSPUtil.getParameter(request, prefix	+ "rev_exp", length));
-			String[] custVndrCntCd = (JSPUtil.getParameter(request, prefix	+ "cust_vndr_cnt_cd", length));
-			String[] pagerows = (JSPUtil.getParameter(request, prefix	+ "pagerows", length));
-			String[] invNo = (JSPUtil.getParameter(request, prefix	+ "inv_no", length));
-			String[] custVndrEngNm = (JSPUtil.getParameter(request, prefix	+ "cust_vndr_eng_nm", length));
-			String[] invExpActAmt = (JSPUtil.getParameter(request, prefix	+ "inv_exp_act_amt", length));
-			String[] ibflag = (JSPUtil.getParameter(request, prefix	+ "ibflag", length));
-			String[] item = (JSPUtil.getParameter(request, prefix	+ "item", length));
-			String[] prnrRefNo = (JSPUtil.getParameter(request, prefix	+ "prnr_ref_no", length));
-			String[] aproFlg = (JSPUtil.getParameter(request, prefix	+ "apro_flg", length));
-			
+			String[] csrNo = (JSPUtil.getParameter(request, prefix + "csr_no",
+					length));
+			String[] invRevActAmt = (JSPUtil.getParameter(request, prefix
+					+ "inv_rev_act_amt", length));
+			String[] loclCurrCd = (JSPUtil.getParameter(request, prefix
+					+ "locl_curr_cd", length));
+			String[] custVndrSeq = (JSPUtil.getParameter(request, prefix
+					+ "cust_vndr_seq", length));
+			String[] joCrrCd = (JSPUtil.getParameter(request, prefix
+					+ "jo_crr_cd", length));
+			String[] rlaneCd = (JSPUtil.getParameter(request, prefix
+					+ "rlane_cd", length));
+			String[] revExp = (JSPUtil.getParameter(request,
+					prefix + "rev_exp", length));
+			String[] custVndrCntCd = (JSPUtil.getParameter(request, prefix
+					+ "cust_vndr_cnt_cd", length));
+			String[] pagerows = (JSPUtil.getParameter(request, prefix
+					+ "pagerows", length));
+			String[] invNo = (JSPUtil.getParameter(request, prefix + "inv_no",
+					length));
+			String[] custVndrEngNm = (JSPUtil.getParameter(request, prefix
+					+ "cust_vndr_eng_nm", length));
+			String[] invExpActAmt = (JSPUtil.getParameter(request, prefix
+					+ "inv_exp_act_amt", length));
+			String[] ibflag = (JSPUtil.getParameter(request, prefix + "ibflag",
+					length));
+			String[] item = (JSPUtil.getParameter(request, prefix + "item",
+					length));
+			String[] prnrRefNo = (JSPUtil.getParameter(request, prefix
+					+ "prnr_ref_no", length));
+			String[] aproFlg = (JSPUtil.getParameter(request, prefix
+					+ "apro_flg", length));
+			String[] acctYrmonFr = (JSPUtil.getParameter(request, prefix
+					+ "acct_yrmon_fr", length));
+			String[] acctYrmonTo = (JSPUtil.getParameter(request, prefix
+					+ "acct_yrmon_to", length));
+			String[] trdCd = (JSPUtil.getParameter(request, prefix + "trd_cd",
+					length));
+
 			for (int i = 0; i < length; i++) {
 				model = new InvoiceDetailVO();
 				if (csrNo[i] != null)
@@ -514,6 +627,12 @@ public class InvoiceDetailVO extends AbstractValueObject {
 					model.setPrnrRefNo(prnrRefNo[i]);
 				if (aproFlg[i] != null)
 					model.setAproFlg(aproFlg[i]);
+				if (acctYrmonFr[i] != null)
+					model.setAproFlg(acctYrmonFr[i]);
+				if (acctYrmonTo[i] != null)
+					model.setAproFlg(acctYrmonTo[i]);
+				if (trdCd[i] != null)
+					model.setAproFlg(trdCd[i]);
 				models.add(model);
 			}
 
@@ -525,39 +644,64 @@ public class InvoiceDetailVO extends AbstractValueObject {
 
 	/**
 	 * VO 배열을 반환
+	 * 
 	 * @return InvoiceDetailVO[]
 	 */
-	public InvoiceDetailVO[] getInvoiceDetailVOs(){
-		InvoiceDetailVO[] vos = (InvoiceDetailVO[])models.toArray(new InvoiceDetailVO[models.size()]);
+	public InvoiceDetailVO[] getInvoiceDetailVOs() {
+		InvoiceDetailVO[] vos = (InvoiceDetailVO[]) models
+				.toArray(new InvoiceDetailVO[models.size()]);
 		return vos;
 	}
-	
+
 	/**
 	 * VO Class의 내용을 String으로 변환
 	 */
 	public String toString() {
-		   return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE );
-	   }
+		return ToStringBuilder.reflectionToString(this,
+				ToStringStyle.MULTI_LINE_STYLE);
+	}
 
 	/**
-	* 포맷팅된 문자열에서 특수문자 제거("-","/",",",":")
-	*/
-	public void unDataFormat(){
-		this.csrNo = this.csrNo .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.invRevActAmt = this.invRevActAmt .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.loclCurrCd = this.loclCurrCd .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.custVndrSeq = this.custVndrSeq .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.joCrrCd = this.joCrrCd .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.rlaneCd = this.rlaneCd .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.revExp = this.revExp .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.custVndrCntCd = this.custVndrCntCd .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.pagerows = this.pagerows .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.invNo = this.invNo .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.custVndrEngNm = this.custVndrEngNm .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.invExpActAmt = this.invExpActAmt .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.ibflag = this.ibflag .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.item = this.item .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.prnrRefNo = this.prnrRefNo .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.aproFlg = this.aproFlg .replaceAll(",", "").replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
+	 * 포맷팅된 문자열에서 특수문자 제거("-","/",",",":")
+	 */
+	public void unDataFormat() {
+		this.csrNo = this.csrNo.replaceAll(",", "").replaceAll("-", "")
+				.replaceAll("/", "").replaceAll(":", "");
+		this.invRevActAmt = this.invRevActAmt.replaceAll(",", "")
+				.replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
+		this.loclCurrCd = this.loclCurrCd.replaceAll(",", "")
+				.replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
+		this.custVndrSeq = this.custVndrSeq.replaceAll(",", "")
+				.replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
+		this.joCrrCd = this.joCrrCd.replaceAll(",", "").replaceAll("-", "")
+				.replaceAll("/", "").replaceAll(":", "");
+		this.rlaneCd = this.rlaneCd.replaceAll(",", "").replaceAll("-", "")
+				.replaceAll("/", "").replaceAll(":", "");
+		this.revExp = this.revExp.replaceAll(",", "").replaceAll("-", "")
+				.replaceAll("/", "").replaceAll(":", "");
+		this.custVndrCntCd = this.custVndrCntCd.replaceAll(",", "")
+				.replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
+		this.pagerows = this.pagerows.replaceAll(",", "").replaceAll("-", "")
+				.replaceAll("/", "").replaceAll(":", "");
+		this.invNo = this.invNo.replaceAll(",", "").replaceAll("-", "")
+				.replaceAll("/", "").replaceAll(":", "");
+		this.custVndrEngNm = this.custVndrEngNm.replaceAll(",", "")
+				.replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
+		this.invExpActAmt = this.invExpActAmt.replaceAll(",", "")
+				.replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
+		this.ibflag = this.ibflag.replaceAll(",", "").replaceAll("-", "")
+				.replaceAll("/", "").replaceAll(":", "");
+		this.item = this.item.replaceAll(",", "").replaceAll("-", "")
+				.replaceAll("/", "").replaceAll(":", "");
+		this.prnrRefNo = this.prnrRefNo.replaceAll(",", "").replaceAll("-", "")
+				.replaceAll("/", "").replaceAll(":", "");
+		this.aproFlg = this.aproFlg.replaceAll(",", "").replaceAll("-", "")
+				.replaceAll("/", "").replaceAll(":", "");
+		this.acctYrmonFr = this.acctYrmonFr.replaceAll(",", "")
+				.replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
+		this.acctYrmonTo = this.acctYrmonTo.replaceAll(",", "")
+				.replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
+		this.trdCd = this.trdCd.replaceAll(",", "").replaceAll("-", "")
+				.replaceAll("/", "").replaceAll(":", "");
 	}
 }

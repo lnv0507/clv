@@ -118,10 +118,23 @@ public class DouTrainingSC extends ServiceCommandSupport {
 				eventResponse = searchTrade(e);
 			} else if (e.getFormCommand().isCommand(FormCommand.SEARCH03)) {
 				eventResponse = searchInvoiceDetail(e);
+			} else if (e.getFormCommand().isCommand(FormCommand.COMMAND01)) {
+				eventResponse = searchDown2Excel(e);
 			}
-			// else if (e.getFormCommand().isCommand(FormCommand.COMMAND01)) {
-			// eventResponse = excelDownloadFromServer(e);
-			// }
+		}
+		return eventResponse;
+	}
+
+	private EventResponse searchDown2Excel(Event e) throws EventException {
+		// TODO Auto-generated method stub
+		GeneralEventResponse eventResponse = new GeneralEventResponse();
+		ClvTrn0003Event event = (ClvTrn0003Event) e;
+		InvoiceBC command = new InvoiceBCImpl();
+		try {
+			eventResponse.setRsVoList(command.searchDown2Excel((event
+					.getInvoiceDetailVO())));
+		} catch (Exception ex) {
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
 		return eventResponse;
 	}
@@ -137,7 +150,8 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		ClvTrn0003Event event = (ClvTrn0003Event) e;
 		InvoiceBC command = new InvoiceBCImpl();
 		try {
-			List<InvoiceVO> list = command.searchInvoiceVO(event.getInvoiceCarrierVO());
+			List<InvoiceVO> list = command.searchInvoiceVO(event
+					.getInvoiceCarrierVO());
 			eventResponse.setRsVoList(list);
 		} catch (Exception ex) {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);

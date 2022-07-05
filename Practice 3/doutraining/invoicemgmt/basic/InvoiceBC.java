@@ -10,11 +10,21 @@ import com.clt.apps.opus.dou.doutraining.invoicemgmt.vo.InvoiceDetailVO;
 import com.clt.apps.opus.dou.doutraining.invoicemgmt.vo.InvoiceTradeVO;
 import com.clt.apps.opus.dou.doutraining.invoicemgmt.vo.InvoiceVO;
 
-public interface InvoiceBC{
-	public List<InvoiceVO> searchInvoiceVO(InvoiceCarrierVO invoiceCarrierVO) throws EventException;
+public interface InvoiceBC {
+	public List<InvoiceVO> searchInvoiceVO(InvoiceCarrierVO invoiceCarrierVO)
+			throws EventException;
+
 	public List<InvoiceVO> searchPartner() throws EventException;
-	public List<InvoiceVO> searchLane(ArrayList<String> invoiceList) throws EventException;
+
+	public List<InvoiceVO> searchLane(ArrayList<String> invoiceList)
+			throws EventException;
+
 	public List<InvoiceTradeVO> searchTrade(ArrayList<String> invoiceList,
 			String rlane) throws EventException;
-	public List<InvoiceDetailVO> searchInvoiceDetailVO(InvoiceCarrierVO invoiceCarrier)throws EventException;
+
+	public List<InvoiceDetailVO> searchInvoiceDetailVO(
+			InvoiceCarrierVO invoiceCarrier) throws EventException;
+
+	public List<Object> searchDown2Excel(InvoiceDetailVO invoiceDetailVO)
+			throws EventException;
 }

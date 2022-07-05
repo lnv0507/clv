@@ -4,11 +4,9 @@
 		<query name="InvoiceDBDAOInvoiceLaneRSQL">
 			<desc><![CDATA[SelectLane]]></desc>
 			<sql><![CDATA[
-select 
-	distinct(rlane_cd)
-from joo_carrier
-where jo_crr_cd IN (
-	#foreach($key IN ${obj_list_no}) #if($velocityCount < $obj_list_no.size()) '$key', #else '$key' #end #end)			]]></sql>
+SELECT DISTINCT(RLANE_CD)
+FROM joo_stl_tgt
+WHERE JO_CRR_CD IN (#foreach($key IN ${jo_crr_cd})#if($velocityCount < $jo_crr_cd.size()) '$key', #else '$key' #end #end)			]]></sql>
 			<params>
 			</params>
 		</query>
