@@ -3,8 +3,8 @@ let sheetObjects = new Array();
 let sheetCnt = 0;
 let comboObjects = new Array();
 let comboCnt = 0;
-let searchSummary = null;
-let searchDetail = null;
+let searchSummary = "";
+let searchDetail = "";
 let tabObjects = new Array();
 let tabCnt = 0;
 let beforetab = 0;
@@ -32,17 +32,13 @@ let setSheetObject = (sheet_obj) => {
 	sheetObjects[sheetCnt++] = sheet_obj;
 }
 /**
- * Registering IBSheet Object as list adding process for list in case of needing
- * batch processing with other items defining list on the top of source.
- * 
- * @param sheet_obj:
- *            String - sheet name.
+ * Sharing Object into tab
+ * @param tab_obj:
+ *            String - tab name.
  */
 let setTabObject = (tab_obj) => {
 	tabObjects[tabCnt++] = tab_obj;
 }
-
-
 
 let getDateFormat = (obj, sFormat) => {
 	let sVal = String(getArgValue(obj));
@@ -61,7 +57,7 @@ let getDateFormat = (obj, sFormat) => {
 }
 //Get month and year to present
 //if from month = month to - 2 because avoid over 3month
-let initPeriod = () => {
+let initCalendar = () => {
 	let formObj = document.form;
 	let ymTo = ComGetNowInfo("ym", "-");
 	formObj.to_acct_yrmon.value = ymTo;
@@ -69,7 +65,7 @@ let initPeriod = () => {
 	formObj.fr_acct_yrmon.value = getDateFormat(ymFrom, "ym");
 }
 // if to date - from date > 88days -> 3month -> overDate
-let checkOverThreeMonth = () => {
+let checkOver3Month = () => {
 	let formObj = document.form;
 	let fromDate = formObj.fr_acct_yrmon.value.replaceStr("-", "") + "01";
 	let toDate = formObj.to_acct_yrmon.value.replaceStr("-", "") + "01";
@@ -88,7 +84,7 @@ let isValidDate = () => {
 // handle month when press previos or next -> +- 1 value month
 let changeMonth = (obj, month) => {
 	if(obj.value === "" ) return;
-	if (obj.value != "") {
+	if(obj.value != "") {
 		obj.value = ComGetDateAdd(obj.value + "-01", "M", month).substr(0, 7);
 	}
 }
@@ -99,8 +95,10 @@ let changeMonth = (obj, month) => {
 let getSearchOption = () => {
 	let formObject = document.form;
 	let result = formObject.fr_acct_yrmon.value
-			+ formObject.to_acct_yrmon.value + formObject.s_jo_crr_cd.value
-			+ formObject.s_rlane_cd.value + formObject.s_trd_cd.value
+			+ formObject.to_acct_yrmon.value 
+			+ formObject.s_jo_crr_cd.value
+			+ formObject.s_rlane_cd.value 
+			+ formObject.s_trd_cd.value
 	return result;
 }
 
@@ -109,11 +107,12 @@ let doActionIBSheet = (sheetObj, formObj, sAction) => {
 	switch (sAction) {
 	// Retrieve button event.
 	case IBSEARCH:
-		if (sheetObj.id == "sheet1") {
+		if(sheetObj.id === "sheet1") {
 			 searchSummary = getSearchOption();
 			formObj.f_cmd.value = SEARCH;
 			sheetObj.DoSearch("CLV_TRN_0003GS.do", FormQueryString(formObj),{Sync : 1});
-		} else if (sheetObj.id == "sheet2"){
+		} 
+		if(sheetObj.id === "sheet2"){
 			 searchDetail = getSearchOption();
 			formObj.f_cmd.value = SEARCH03;
 			let xml = sheetObjects[1].GetSearchData("CLV_TRN_0003GS.do", FormQueryString(formObj));
@@ -121,23 +120,64 @@ let doActionIBSheet = (sheetObj, formObj, sAction) => {
 		}
 		break;
 	 case IBDOWNEXCEL:
-	 if (sheetObj.RowCount() < 1) {
-	 ComShowCodeMessage("COM132501");
-	 } else {
-	 sheetObj.Down2ExcelBuffer(true);
-	 sheetObj.Down2Excel({ FileName: 'excel1', SheetName: 'sheet1', DownCols:makeHiddenSkipCol(sheetObj), SheetDesign: 1, Merge: 1 });
-	 sheetObjects[1].Down2Excel({ SheetName: 'sheet2', DownCols:makeHiddenSkipCol(sheetObjects[1]), Merge: 1 });
-	 sheetObj.Down2ExcelBuffer(false);
-					
-	 }
-	 break;
+		 let sizeSheet = sheetObj.RowCount();
+		 let indexSheet = sheetObj.id;
+		 if(sizeSheet < 1 && indexSheet === "sheet1") {
+		 ComShowCodeMessage("COM132501");
+		 } 
+		 if(sizeSheet >= 1 && indexSheet === "sheet1"){
+		 sheetObj.Down2ExcelBuffer(true);
+		 sheetObj.Down2Excel({ FileName: 'excel1', SheetName: 'sheet1', DownCols:makeHiddenSkipCol(sheetObj), SheetDesign: 1, Merge: 1 });
+		 sheetObjects[1].Down2Excel({ SheetName: 'sheet2', DownCols:makeHiddenSkipCol(sheetObjects[1]), Merge: 1 });
+		 sheetObj.Down2ExcelBuffer(false);			
+		 }
+		 if( indexSheet === "sheet2"){
+			formObj.f_cmd.value = COMMAND01;
+			/**
+			 * @URL: parameter is used to mark the page path where excel display
+			 *       data is populated
+			 * @ExtendParam: parameter is used to create a get method
+			 *               QueryString of search conditions to send to the
+			 *               server, which can be retrieved using
+			 *               request.getParameter() method from the page set in
+			 *               URL parameter
+			 * @Filename: parameter is used to set the downloaded excel file
+			 *            name. If file extension is set as xls, excel 2003
+			 *            format file is downloaded. If xlsx, excel 2007 format
+			 *            file is downloaded. If no value is set, an xls file is
+			 *            downloaded.
+			 * @DownCols: parameter is a string connecting all downloading
+			 *            columns using "|". You can use either SaveName or
+			 *            column index. If null, all columns are downloaded
+			 * @Merge: parameter determines whether to merge columns if adjacent
+			 *         header data cells contain same letters. The default is 0
+			 * @SheetDesign: parameter determines whether to download header
+			 *               color. The default is 0.
+			 * @KeyFiledMark: parameter is used to download KeyFIeld mark (*) in
+			 *                KeyField column.
+			 * @SheetName: name sheet of excel
+			 */
+			let param ={
+					URL:"/opuscntr/Down2ExcelGS.do", // Business logic page
+					ExtendParam:FormQueryString(formObj),
+					FileName:"Details.xls",
+					DownCols: makeHiddenSkipCol(sheetObjects[1]),
+					Merge:1,
+					SheetDesign:1,
+					KeyFieldMark:0,
+					SheetName:'Details'
+			};
+			sheetObjects[1].DirectDown2Excel(param);
+			ComOpenWait(false);
+		 }
+		 break;
 	}
 }
 
 //reset all sheet and input
 let onclickButtonNew = () => {
 	ComResetAll();
-	initPeriod();
+	initCalendar();
 	s_jo_crr_cd.SetItemCheck(0, 1, 1);
 	s_rlane_cd.SetEnable(false);
 	s_trd_cd.SetEnable(false);
@@ -157,7 +197,6 @@ let getCurrentSheet = () => {
  */
 let processButtonClick = () => {
 	let formObj = document.form;
-	let check3month = true;
 	try {
 		let srcName = ComGetEvent("name");
 		// Get event by name which corresponding to button.
@@ -165,19 +204,12 @@ let processButtonClick = () => {
 		case "btn_Retrieve":
 			// asking user want to retrieve data by month
 			// if over 3 months
-			if (!checkOverThreeMonth()) {
-				// the letiable to store user's choose
-				if (check3month) {
-					if (confirm("Year Month over 3 months, do you realy want to get data?")) {
-						check3month = true;
-					} else {
-						check3month = false;
-						return;
-					}
-				}
+			if (!checkOver3Month()) {
+				// the variable to store user's choose
+				confirm("Year Month over 3 months, do you realy want to get data?");
 			}
-			doActionIBSheet(getCurrentSheet(), formObj, IBSEARCH);
-			break;
+		doActionIBSheet(getCurrentSheet(), formObj, IBSEARCH);
+		break;
 		// For from date
 		// Event fires when user press previous month button
 		// month -1
@@ -219,43 +251,7 @@ let processButtonClick = () => {
 		// Event fires when DownExcel button is clicked, down sheet to excel
 			// Just down detail excel from server
 		case "btn_Down":
-			formObj.f_cmd.value = COMMAND01;
-			/**
-			 * @URL: parameter is used to mark the page path where excel display
-			 *       data is populated
-			 * @ExtendParam: parameter is used to create a get method
-			 *               QueryString of search conditions to send to the
-			 *               server, which can be retrieved using
-			 *               request.getParameter() method from the page set in
-			 *               URL parameter
-			 * @Filename: parameter is used to set the downloaded excel file
-			 *            name. If file extension is set as xls, excel 2003
-			 *            format file is downloaded. If xlsx, excel 2007 format
-			 *            file is downloaded. If no value is set, an xls file is
-			 *            downloaded.
-			 * @DownCols: parameter is a string connecting all downloading
-			 *            columns using "|". You can use either SaveName or
-			 *            column index. If null, all columns are downloaded
-			 * @Merge: parameter determines whether to merge columns if adjacent
-			 *         header data cells contain same letters. The default is 0
-			 * @SheetDesign: parameter determines whether to download header
-			 *               color. The default is 0.
-			 * @KeyFiledMark: parameter is used to download KeyFIeld mark (*) in
-			 *                KeyField column.
-			 * @SheetName: name sheet of excel
-			 */
-			let param ={
-					URL:"/opuscntr/Down2ExcelGS.do", // Business logic page
-					ExtendParam:FormQueryString(formObj),
-					FileName:"Details.xls",
-					DownCols: makeHiddenSkipCol(sheetObjects[1]),
-					Merge:1,
-					SheetDesign:1,
-					KeyFieldMark:0,
-					SheetName:'Details'
-			};
-			sheetObjects[1].DirectDown2Excel(param);
-			ComOpenWait(false);
+			doActionIBSheet(sheetObjects[1], formObj, IBDOWNEXCEL);
 			break;
 
 		}
@@ -278,16 +274,19 @@ document.onclick = processButtonClick;
  * @param comboItems
  */
 let addComboItem = (comboObj, comboItems) => {
-	for (let i = 0; i < comboItems.length; i++) {
-		let comboItem = comboItems[i].split(",");
-		if (comboItem.length == 1) {
-			comboObj.InsertItem(i, comboItem[0], comboItem[0]);
-		} else {
-			comboObj.InsertItem(i, comboItem[0] + "|" + comboItem[1],
-					comboItem[1]);
+	let assignComboItems = [...comboItems];
+	console.log(assignComboItems);
+	assignComboItems.forEach((item, index)=>{
+		let comboItem = assignComboItems[index].split(",");
+//		console.log(comboItem);
+		if(comboItem.length === 1) {
+			comboObj.InsertItem(index, comboItem[0], comboItem[0]);
+		} 
+		if(comboItem.length != 1){
+			comboObj.InsertItem(index, comboItem[0] + "|" + comboItem[1], comboItem[1]);
 		}
-
-	}
+	});
+	
 }
 /**
  * List data of partner and split by | doing AHK|POP -> [AHK, POP]
@@ -335,24 +334,24 @@ let initSheet = (sheetObj) => {
 			with (sheetObj) {
 				let HeadTitle1 = "|Partner|Lane|Invoice No|Slip No|Approved|Curr.|Revenue|Expense|Customer/S.Provider|Customer/S.Provider|cust_vndr_cnt_cd|cust_vndr_seq";
 				let HeadTitle2 = "|Partner|Lane|Invoice No|Slip No|Approved|Curr.|Revenue|Expense|Code|Name|cust_vndr_cnt_cd|cust_vndr_seq";		
-				SetConfig({ SearchMode: 0, MergeSheet: 5, Page: 500, DataRowMerge: 0 });
+				SetConfig({ SearchMode: 2, MergeSheet: 5, Page: 20, FrozenCol:0, DataRowMerge: 1 });
 				let info = { Sort: 0, ColMove: 0, HeaderCheck: 0, ColResize: 1 };
 				let headers = [{ Text: HeadTitle1, Align: "Center" }, { Text: HeadTitle2, Align: "Center" }];
 				InitHeaders(headers, info);
 				let cols = [
 					{ Type: "Status",Hidden: 1, Width: 0,   Align: "Center", ColMerge: 0, SaveName: "ibflag" },
-					{ Type: "Text",  Hidden: 0, Width: 50,  Align: "Center", ColMerge: 0, SaveName: "jo_crr_cd",        KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
-					{ Type: "Text",  Hidden: 0, Width: 70,  Align: "Center", ColMerge: 0, SaveName: "rlane_cd",         KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
-					{ Type: "Text",  Hidden: 0, Width: 90,  Align: "Center", ColMerge: 0, SaveName: "inv_no",           KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
-					{ Type: "Text",  Hidden: 0, Width: 120, Align: "Center", ColMerge: 0, SaveName: "csr_no",           KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
-					{ Type: "Text",  Hidden: 0, Width: 90,  Align: "Center", ColMerge: 0, SaveName: "apro_flg",         KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
-					{ Type: "Text",  Hidden: 0, Width: 50,  Align: "Center", ColMerge: 0, SaveName: "locl_curr_cd",     KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
-					{ Type: "Float", Hidden: 0, Width: 120, Align: "Right",  ColMerge: 0, SaveName: "inv_rev_act_amt",  KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
-					{ Type: "Float", Hidden: 0, Width: 120, Align: "Right",  ColMerge: 0, SaveName: "inv_exp_act_amt",  KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
-					{ Type: "Text",  Hidden: 0, Width: 100, Align: "Center", ColMerge: 0, SaveName: "prnr_ref_no",      KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
+					{ Type: "Text",  Hidden: 0, Width: 50,  Align: "Center", ColMerge: 0, SaveName: "jo_crr_cd", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
+					{ Type: "Text",  Hidden: 0, Width: 70,  Align: "Center", ColMerge: 0, SaveName: "rlane_cd", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
+					{ Type: "Text",  Hidden: 0, Width: 90,  Align: "Center", ColMerge: 0, SaveName: "inv_no", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
+					{ Type: "Text",  Hidden: 0, Width: 120, Align: "Center", ColMerge: 0, SaveName: "csr_no", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
+					{ Type: "Text",  Hidden: 0, Width: 90,  Align: "Center", ColMerge: 0, SaveName: "apro_flg", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
+					{ Type: "Text",  Hidden: 0, Width: 50,  Align: "Center", ColMerge: 0, SaveName: "locl_curr_cd", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
+					{ Type: "Float", Hidden: 0, Width: 120, Align: "Right",  ColMerge: 0, SaveName: "inv_rev_act_amt", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
+					{ Type: "Float", Hidden: 0, Width: 120, Align: "Right",  ColMerge: 0, SaveName: "inv_exp_act_amt", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
+					{ Type: "Text",  Hidden: 0, Width: 100, Align: "Center", ColMerge: 0, SaveName: "prnr_ref_no", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
 					{ Type: "Text",  Hidden: 0, Width: 40,  Align: "Center", ColMerge: 0, SaveName: "cust_vndr_eng_nm", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 }, 
 					{ Type: "Text",  Hidden: 1, Width: 90,  Align: "Left",   ColMerge: 0, SaveName: "cust_vndr_cnt_cd", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
-					{ Type: "Text",  Hidden: 1, Width: 90,  Align: "Left",   ColMerge: 0, SaveName: "cust_vndr_seq",    KeyField: 0, UpdateEdit: 0, InsertEdit: 0 }
+					{ Type: "Text",  Hidden: 1, Width: 90,  Align: "Left",   ColMerge: 0, SaveName: "cust_vndr_seq", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 }
 				];
 				 /**
 					 * @param:Type (String) : Column data type
@@ -403,24 +402,24 @@ let initSheet = (sheetObj) => {
 			with (sheetObj) {
 				let HeadTitle1 = "|Partner|Lane|Invoice No|Slip No|Approved|Rev / Exp|Item|Curr.|Revenue|Expense|Customer/S.Provider|Customer/S.Provider";
 				let HeadTitle2 = "|Partner|Lane|Invoice No|Slip No|Approved|Rev / Exp|Item|Curr.|Revenue|Expense|Code|Name";
-				SetConfig({ SearchMode: 0, MergeSheet: 5, Page: 500, DataRowMerge: 1 });
+				SetConfig({ SearchMode: 2, MergeSheet: 5, Page: 20, FrozenCol:0, DataRowMerge: 1 });
 				let info = { Sort: 0, HeaderCheck: 1, ColResize: 0 };
 				let headers = [{ Text: HeadTitle1, Align: "Center" }, { Text: HeadTitle2, Align: "Center" }];
 				InitHeaders(headers, info);
 				let cols = [{ Type: "Status", Hidden: 1, Width: 10, Align: "Center", ColMerge: 0, SaveName: "ibflag", KeyField: 0, CalcLogic: "", Format: "", UpdateEdit: 0, InsertEdit: 0 },// 
-				{ Type: "Text", Hidden: 0, Width: 50,  Align: "Center", ColMerge: 0, SaveName: "jo_crr_cd",			KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// partner
-				{ Type: "Text", Hidden: 0, Width: 50,  Align: "Center", ColMerge: 0, SaveName: "rlane_cd",			KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// lane
-				{ Type: "Text", Hidden: 0, Width: 150, Align: "Center", ColMerge: 0, SaveName: "inv_no", 			KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// invoice
+				{ Type: "Text", Hidden: 0, Width: 50,  Align: "Center", ColMerge: 0, SaveName: "jo_crr_cd",	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// partner
+				{ Type: "Text", Hidden: 0, Width: 50,  Align: "Center", ColMerge: 0, SaveName: "rlane_cd", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// lane
+				{ Type: "Text", Hidden: 0, Width: 150, Align: "Center", ColMerge: 0, SaveName: "inv_no", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// invoice
 																																								// no
-				{ Type: "Text", Hidden: 0, Width: 150, Align: "Center", ColMerge: 0, SaveName: "csr_no",		 	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// slipno
-				{ Type: "Text", Hidden: 0, Width: 70,  Align: "Center", ColMerge: 0, SaveName: "apro_flg", 			KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// approved
-				{ Type: "Text", Hidden: 0, Width: 70,  Align: "Center", ColMerge: 0, SaveName: "rev_exp", 		KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// rev/exp
-				{ Type: "Text", Hidden: 0, Width: 60,  Align: "Center", ColMerge: 0, SaveName: "item", 	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// item
-				{ Type: "Text", Hidden: 0, Width: 40,  Align: "Center", ColMerge: 0, SaveName: "locl_curr_cd", 		KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// currency
-				{ Type: "Float",Hidden: 0, Width: 100, Align: "Right",  ColMerge: 0, SaveName: "inv_rev_act_amt", 	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// revenue
-				{ Type: "Float",Hidden: 0, Width: 100, Align: "Right",  ColMerge: 0, SaveName: "inv_exp_act_amt", 	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// expense
-				{ Type: "Text", Hidden: 0, Width: 100, Align: "Center", ColMerge: 0, SaveName: "prnr_ref_no", 		KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// code
-				{ Type: "Text", Hidden: 0, Width: 40,  Align: "Center", ColMerge: 0, SaveName: "cust_vndr_eng_nm",  KeyField: 0, UpdateEdit: 0, InsertEdit: 0 }// name
+				{ Type: "Text", Hidden: 0, Width: 150, Align: "Center", ColMerge: 0, SaveName: "csr_no", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// slipno
+				{ Type: "Text", Hidden: 0, Width: 70,  Align: "Center", ColMerge: 0, SaveName: "apro_flg", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// approved
+				{ Type: "Text", Hidden: 0, Width: 70,  Align: "Center", ColMerge: 0, SaveName: "rev_exp", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// rev/exp
+				{ Type: "Text", Hidden: 0, Width: 60,  Align: "Center", ColMerge: 0, SaveName: "item", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// item
+				{ Type: "Text", Hidden: 0, Width: 40,  Align: "Center", ColMerge: 0, SaveName: "locl_curr_cd", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// currency
+				{ Type: "Float",Hidden: 0, Width: 100, Align: "Right",  ColMerge: 0, SaveName: "inv_rev_act_amt", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// revenue
+				{ Type: "Float",Hidden: 0, Width: 100, Align: "Right",  ColMerge: 0, SaveName: "inv_exp_act_amt", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// expense
+				{ Type: "Text", Hidden: 0, Width: 100, Align: "Center", ColMerge: 0, SaveName: "prnr_ref_no", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// code
+				{ Type: "Text", Hidden: 0, Width: 40,  Align: "Center", ColMerge: 0, SaveName: "cust_vndr_eng_nm", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 }// name
 				];
 				InitColumns(cols);
 				SetColProperty(0, "rev_exp", { ComboText: "|Rev|Exp", ComboCode: "|R|E", DefaultValue: "R" });	
@@ -447,27 +446,30 @@ let initTab = (tabObj, tabNo) => {
  * sheet, It is the first called area when file *jsp onload event.
  */
 let loadPage = () => {
-
+	let assignTabObject = [...tabObjects];
+	let assignSheetObjects = [...sheetObjects];
+	let assignComboObjects = [...comboObjects];
 	// generate Grid Layout
-	for (let j = 0; j < tabObjects.length; j++) {
-		initTab(tabObjects[j], j + 1);
-		tabObjects[j].SetSelectedIndex(0);
-	}
-	for (let i = 0; i < sheetObjects.length; i++) {
-		ComConfigSheet(sheetObjects[i]);
-		initSheet(sheetObjects[i], i + 1);
-		ComEndConfigSheet(sheetObjects[i]);
-	}
+	
+	assignTabObject.forEach((value, index)=>{
+		initTab(value, index + 1);
+		value.SetSelectedIndex(0);
+	});
+	assignSheetObjects.forEach((value, index)=>{
+		ComConfigSheet(value);
+		initSheet(value, index + 1);
+		ComEndConfigSheet(value);
+	});
 	// initializing IBMultiCombo
-	for (let k = 0; k < comboObjects.length; k++) {
-		initCombo(comboObjects[k], k + 1);
-	}
+	assignComboObjects.forEach((value, index) => {
+		initCombo(value, index + 1);
+	});
 	// initializing tabobject
 	
 	s_rlane_cd.SetEnable(false);
 	s_trd_cd.SetEnable(false);
 	// call date to and date form defaul date to = date present
-	 initPeriod();
+	 initCalendar();
 	// auto search data after loading finish.
 	doActionIBSheet(sheetObjects[0], document.form, IBSEARCH);
 }
@@ -486,9 +488,12 @@ let loadPage = () => {
  */
 let getDataRow = (sheetObj, row, saveNames) => {
 	let result = "";
-	for (let i = 0; i < saveNames.length; i++) {
-		result += sheetObj.GetCellValue(row, saveNames[i]);
-	}
+	let assignSaveNames = [...saveNames];
+	
+	assignSaveNames.forEach((value) => {
+		result += sheetObj.GetCellValue(row, value);
+	});
+	
 	return result;
 }
 /**
@@ -497,40 +502,32 @@ let getDataRow = (sheetObj, row, saveNames) => {
  * data and check formQuery present if != show message
  */
 let changeTab = () => {
-	let firstLoad = true;
-	if (firstLoad) {
-		firstLoad = false;
-		return;
-	}
-
 	let currentSheet = getCurrentSheet();
 	let formQuery = getSearchOption();
-
-	if (searchSummary != formQuery && formQuery != searchDetail) {
-		if (confirm("WARNING!!! Data was changed on sheet. Do you want retrieve?")) {
-			doActionIBSheet(currentSheet, document.form, IBSEARCH);
-		} else {
-			return;
-		}
+	console.log(searchSummary);
+	console.log(formQuery);
+	console.log(searchDetail);
+	
+	if(searchSummary != formQuery && formQuery != searchDetail) {
+		confirm("WARNING!!! Data was changed on sheet. Do you want retrieve?");
+		doActionIBSheet(currentSheet, document.form, IBSEARCH);
+		return;
 	}
-	if (currentSheet.id == "sheet1") {// in summary
-		if (searchSummary != formQuery) {
-			doActionIBSheet(currentSheet, document.form, IBSEARCH)
-		}
-	} else {
-		if (searchDetail != formQuery) {
-			doActionIBSheet(currentSheet, document.form, IBSEARCH)
-		}
-	}
+	if (currentSheet.id == "sheet1" && searchSummary != formQuery) {// in summary
+		doActionIBSheet(currentSheet, document.form, IBSEARCH)
+		return;
+	} 
+	doActionIBSheet(currentSheet, document.form, IBSEARCH)
+		
 }
 var tab1_OnChange = (tabObj, nItem) => {
 	// it handles the case where there are multiple elements with the same name
 	// properly
-	var objs = document.all.item("tabLayer");
+	let objs = document.all.item("tabLayer");
 	// set the style display for next tab
 	objs[nItem].style.display = "Inline";
 	// --------------- this is important! --------------------------//
-	for (var i = 0; i < objs.length; i++) {
+	for (let i = 0; i < objs.length; i++) {
 		if (i != nItem) {
 			// hide the current tab
 			objs[i].style.display = "none";
@@ -574,32 +571,44 @@ var sheet1_OnDblClick = (sheetObj, Row, Col) => {
 	}
 }
 
-let hightLightSubsumTotalSum = (sheetObj) => {
+let subsumTotalSum = (sheetObj) => {
+	let rowLast = sheetObj.LastRow() -1; // but -1 because LastRow = total last when hidden this return rowLast
 	if (sheetObj.RowCount() > 0) {
-		sheetObj.SetRowHidden(sheetObj.LastRow(),1);
-		for (let i = sheetObj.HeaderRows(); i <= sheetObj.LastRow(); i++) {
-			if (sheetObj.GetCellValue(i, "jo_crr_cd") == '') {
-				if (sheetObj.GetCellValue(i, "inv_no") != '') {
-					sheetObj.SetCellValue(i, "inv_no", "");
-					sheetObj.SetCellValue(i, "locl_curr_cd", sheetObj.GetCellValue(i-1, "locl_curr_cd"));
-					
-				}else{
-					sheetObj.SetRangeFontBold(i, 1, i, 10, 1);
-					sheetObj.SetRowBackColor(i, "#FFDAB9");
-				} 
-			}
+		sheetObj.SetRowHidden(sheetObj.LastRow(),1); // hide totalsum LAST
+		/*
+		 * Return the row index of the last row.
+			Using this method will return the index of the very last row, not just last data row or the last row 
+			as displayed in the screen.
+			Note that the last row may be a sum row, data row or even a header row.
+		 */
+	}
+	console.log( sheetObj.HeaderRows());
+	/*
+	 * HeaderRows:
+	 * Check header row count.
+		This method returns the header row counts as set in InitHeaders() method.
+	 */
+	for (let i = sheetObj.HeaderRows(); i <= sheetObj.LastRow(); i++) {
+		if (sheetObj.GetCellValue(i, "jo_crr_cd") == '') {
+			sheetObj.SetCellValue(i, "inv_no", "");
+			sheetObj.SetCellValue(i, "locl_curr_cd", 
+			sheetObj.GetCellValue(i-1, "locl_curr_cd"));
 		}
 	}
+	if (sheetObj.GetCellValue(rowLast, "inv_no") == '') {
+		sheetObj.SetRangeFontBold(rowLast, 1, rowLast , 10, 1);
+		sheetObj.SetRowBackColor(rowLast, "#FFDAB9");
+	} 
 }
 
 var sheet1_OnSearchEnd = (sheetObj, Code, Msg, StCode, StMsg) => {
 	ComOpenWait(false);
-	hightLightSubsumTotalSum(sheetObj);
+	subsumTotalSum(sheetObj);
 }
 
 var sheet2_OnSearchEnd = (sheetObj, Code, Msg, StCode, StMsg) => {
 	ComOpenWait(false);
-	hightLightSubsumTotalSum(sheetObj);
+	subsumTotalSum(sheetObj);
 }
 
 
@@ -625,13 +634,14 @@ var s_jo_crr_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCo
 		s_rlane_cd.SetEnable(false);
 		s_trd_cd.RemoveAll();
 		s_trd_cd.SetEnable(false);
-	} else if (OldIndex != 0) {
+	} 
+	if (OldIndex != 0) {
 		let newIndexArr = NewIndex.split(",");
 		if (newIndexArr[newIndexArr.length - 1] == 0 && OldIndex != -1) {
-			for (let i = 0; i < newIndexArr.length; i++) {
-				let itemChk = parseInt(newIndexArr[i]);
-				s_jo_crr_cd.SetItemCheck(itemChk, 0, 0);
-			}
+			newIndexArr.forEach((value)=>{
+				let location = parseInt(value);
+				s_jo_crr_cd.SetItemCheck(location, 0, 0);
+			});
 			s_jo_crr_cd.SetItemCheck(0, 1, 0);
 			s_rlane_cd.RemoveAll();
 			s_rlane_cd.SetEnable(false);
@@ -658,11 +668,13 @@ let initComboBoxTrade = (tradeList) => {
 }
 
 var s_rlane_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCode) => {
-	if (NewCode.length != 0) {
-		s_trd_cd.SetEnable(true);
-	} else {
+
+	if (NewCode.length === 0){
 		s_trd_cd.SetEnable(false);
+		return;
 	}
+
+	s_trd_cd.SetEnable(true);
 	laneValue = NewCode;
 	let formObj = document.form;
 	formObj.f_cmd.value = SEARCH02;
@@ -676,13 +688,17 @@ var s_rlane_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCod
 // when click partner all unable Lane end Trade. if code != all Lane enable and
 // trade still unable
 var s_jo_crr_cd_OnCheckClick = (sheetObj, Index, Code) => {
-	if (Code == "ALL") {
-		s_rlane_cd.SetEnable(false);
-		s_trd_cd.RemoveAll();
-		s_trd_cd.SetEnable(false);
-	} else {
+	
+	if (Code != "ALL") {
 		s_rlane_cd.SetEnable(true);
+		return;
 	}
+	
+	s_rlane_cd.RemoveAll();
+	s_rlane_cd.SetEnable(false);
+	s_trd_cd.RemoveAll();
+	s_trd_cd.SetEnable(false);
+	
 }
 
 
@@ -695,21 +711,23 @@ var s_jo_crr_cd_OnCheckClick = (sheetObj, Index, Code) => {
  * @param result
  *            if Down sheet finish show message success
  */
-var sheet1_OnDownFinish = (downloadType, result) => {
-	if(typeof downloadType != "String" || typeof result != "boolean") return;
+var sheet1_OnDownFinish = (sheetObj, downloadType, result) => {
+	
+	if(typeof downloadType != "String" && typeof result != "boolean") return;
+	
 	ComOpenWait(false);
-	if (!result) {
-		ComShowCodeMessage("COM131102", "data");
-	} else {
-		ComShowCodeMessage("COM131101", "data");
+	if(!result) {
+		return ComShowCodeMessage("COM131102", "data");
 	}
+	return ComShowCodeMessage("COM131101", "data");
 }
-var sheet2_OnDownFinish = (downloadType, result) => {
-	if(typeof downloadType != "String" || typeof result != "boolean") return;
+var sheet2_OnDownFinish = (sheetObj, downloadType, result) => {
+	
+	if(typeof downloadType != "String" && typeof result != "boolean") return;
+	
 	ComOpenWait(false);
-	if (!result) {
-		ComShowCodeMessage("COM131102", "data");
-	} else {
-		ComShowCodeMessage("COM131101", "data");
-	}
+	if(!result) {
+		return ComShowCodeMessage("COM131102", "data");
+	} 
+	return ComShowCodeMessage("COM131101", "data");
 }
