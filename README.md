@@ -4,13 +4,13 @@
 
 # ![This is an image](https://img.shields.io/static/v1?label=PRACTICE&message=CLV&color=yellow)
 
-- JS: IBSheet
+- ![This is an image](https://img.shields.io/static/v1?label=JS&message=IBSHEET&color=green)
   + Framework building by CLV support Sheet Page.
   + After complete Practice about IBSHEET I can understand overview step create and operate with this sheet throught the event IBSHEET support.
   + I try using ES6 for this practice in spite of project building 200x still can run.
   + With this practice start time. I feel hard and can't using but when reading, understand document you can using easy.
   
-- JAVA: JavaEE Call SQL to JSP
+- ![This is an image](https://img.shields.io/static/v1?label=JAVA&message=JAVA EE Call DTB To Client&color=green)
 
   + With java for practice. It operate following step Request to Resposne.
   + May call DB from Server to Client. Dev need understand transition basic, event, itegration, vo and FILE SC let can exchange data.
