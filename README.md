@@ -1,5 +1,4 @@
-# ![This is an image](https://img.shields.io/static/v1?label=PRACTICE&message=CLV&color=yellow)
- <p align="right">
+# ![This is an image](https://img.shields.io/static/v1?label=PRACTICE&message=CLV&color=yellow) <p align="right">
  <img src="https://raw.githubusercontent.com/matiassingers/awesome-readme/master/icon.png" alt="Sublime's custom image"/>
 </p>
 - JS: IBSheet
