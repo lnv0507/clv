@@ -26,4 +26,4 @@
 
 
 ![This is an image](https://img.shields.io/github/issues/lnv0507/clv)
-![This is an image](https://img.shields.io/github/url?url=[https%3A%2F%2Fgithub.com%2Flnv0507%2Fclv](https://github.com/lnv0507))
+![This is an image](https://img.shields.io/github/url?url=https://github.com/lnv0507)
