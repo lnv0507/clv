@@ -12,13 +12,13 @@ Practice CLV
 
   + With java for practice. It operate following step Request to Resposne.
   + May call DB from Server to Client. Dev need understand transition basic, event, itegration, vo and FILE SC let can exchange data.
- -> After Practice I learned operate and using framework of project and transition  from client to server.
-    + JSP call JS.
-    + JS call Backend through the FormCommand.
-    + HTMLActione will get Formcommand and handle with events.
-    + After will call file SC with event and Formcommand that.
-    + SC call File BC let BC handle function for this event
-    + File BC will call DBDAO let DB call Data through the Query SQL.
-    + Complete step. Data return Through List, String, Integer,... specified by BC. 
-    + Event return Response by doEnd(EventResponse).
+  -> After Practice I learned operate and using framework of project and transition  from client to server.
+  + JSP call JS.
+  + JS call Backend through the FormCommand.
+  + HTMLActione will get Formcommand and handle with events.
+  + After will call file SC with event and Formcommand that.
+  + SC call File BC let BC handle function for this event
+  + File BC will call DBDAO let DB call Data through the Query SQL.
+  + Complete step. Data return Through List, String, Integer,... specified by BC. 
+  + Event return Response by doEnd(EventResponse).
     
