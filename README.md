@@ -1,5 +1,5 @@
 # Practice CLV
-https://img.shields.io/github/issues/lnv0507/clv
+(https://img.shields.io/static/v1?label=<LABEL>&message=<CLV>&color=<yellow>)
 ![This is an image](https://raw.githubusercontent.com/matiassingers/awesome-readme/master/icon.png)
 - JS: IBSheet
   + Framework building by CLV support Sheet Page.
