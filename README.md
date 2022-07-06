@@ -15,7 +15,7 @@
   + With java for practice. It operate following step Request to Resposne.
   + May call DB from Server to Client. Dev need understand transition basic, event, itegration, vo and FILE SC let can exchange data.
 ****************************************************************************************
-![This is an image](?style=for-the-after&logo=appveyor) I learned operate and using framework of project and transition  from client to server.
+![This is an image](https://img.shields.io/static/v1?label=AFTER&message=DONE-PRACTICEEE&color=green)I learned operate and using framework of project and transition  from client to server.
 ****************************************************************************************
   + JSP call JS.
   + JS call Backend through the FormCommand.
