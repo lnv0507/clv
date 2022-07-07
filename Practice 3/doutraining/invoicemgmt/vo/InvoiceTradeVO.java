@@ -105,18 +105,7 @@ public class InvoiceTradeVO extends AbstractValueObject {
 	 * 
 	 * @return frAcctYrmon
 	 */
-	public String getFrAcctYrmon() {
-		return this.frAcctYrmon;
-	}
 
-	/**
-	 * Column Info
-	 * 
-	 * @return toAcctYrmon
-	 */
-	public String getToAcctYrmon() {
-		return this.toAcctYrmon;
-	}
 
 	/**
 	 * Page Number
@@ -125,6 +114,24 @@ public class InvoiceTradeVO extends AbstractValueObject {
 	 */
 	public String getPagerows() {
 		return this.pagerows;
+	}
+
+
+
+	public String getFrAcctYrmon() {
+		return frAcctYrmon;
+	}
+
+	public void setFrAcctYrmon(String frAcctYrmon) {
+		this.frAcctYrmon = frAcctYrmon;
+	}
+
+	public String getToAcctYrmon() {
+		return toAcctYrmon;
+	}
+
+	public void setToAcctYrmon(String toAcctYrmon) {
+		this.toAcctYrmon = toAcctYrmon;
 	}
 
 	/**
@@ -150,18 +157,6 @@ public class InvoiceTradeVO extends AbstractValueObject {
 	 * 
 	 * @param frAcctYrmon
 	 */
-	public void setFrAcctYrmon(String frAcctYrmon) {
-		this.frAcctYrmon = frAcctYrmon;
-	}
-
-	/**
-	 * Column Info
-	 * 
-	 * @param toAcctYrmon
-	 */
-	public void setToAcctYrmon(String toAcctYrmon) {
-		this.toAcctYrmon = toAcctYrmon;
-	}
 
 	/**
 	 * Page Number

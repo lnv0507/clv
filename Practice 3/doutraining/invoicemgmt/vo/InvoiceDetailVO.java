@@ -74,9 +74,9 @@ public class InvoiceDetailVO extends AbstractValueObject {
 	/* Column Info */
 	private String aproFlg = null;
 	/* Column Info */
-	private String acctYrmonFr = null;
+	private String frAcctYrmon = null;
 	/* Column Info */
-	private String acctYrmonTo = null;
+	private String toAcctYrmon = null;
 	/* Column Info */
 	private String trdCd = null;
 
@@ -111,8 +111,8 @@ public class InvoiceDetailVO extends AbstractValueObject {
 		this.item = item;
 		this.prnrRefNo = prnrRefNo;
 		this.aproFlg = aproFlg;
-		this.acctYrmonFr = acctYrmonFr;
-		this.acctYrmonTo = acctYrmonTo;
+		this.frAcctYrmon = frAcctYrmon;
+		this.toAcctYrmon = toAcctYrmon;
 		this.trdCd = trdCd;
 	}
 
@@ -138,8 +138,8 @@ public class InvoiceDetailVO extends AbstractValueObject {
 		this.hashColumns.put("item", getItem());
 		this.hashColumns.put("prnr_ref_no", getPrnrRefNo());
 		this.hashColumns.put("apro_flg", getAproFlg());
-		this.hashColumns.put("acct_yrmon_fr", getAcctYrmonFr());
-		this.hashColumns.put("acct_yrmon_to", getAcctYrmonTo());
+		this.hashColumns.put("fr_acct_yrmon", getFrAcctYrmon());
+		this.hashColumns.put("to_acct_yrmon", getToAcctYrmon());
 		this.hashColumns.put("trd_cd", getTrdCd());
 		return this.hashColumns;
 	}
@@ -166,26 +166,27 @@ public class InvoiceDetailVO extends AbstractValueObject {
 		this.hashFields.put("item", "item");
 		this.hashFields.put("prnr_ref_no", "prnrRefNo");
 		this.hashFields.put("apro_flg", "aproFlg");
-		this.hashFields.put("acct_yrmon_fr", "acctYrmonFr");
-		this.hashFields.put("acct_yrmon_to", "acctYrmonTo");
+		this.hashColumns.put("fr_acct_yrmon", getFrAcctYrmon());
+		this.hashColumns.put("to_acct_yrmon", getToAcctYrmon());
 		this.hashFields.put("trd_cd", "trdCd");
 		return this.hashFields;
 	}
 
-	public String getAcctYrmonFr() {
-		return acctYrmonFr;
+
+	public String getFrAcctYrmon() {
+		return frAcctYrmon;
 	}
 
-	public void setAcctYrmonFr(String acctYrmonFr) {
-		this.acctYrmonFr = acctYrmonFr;
+	public void setFrAcctYrmon(String frAcctYrmon) {
+		this.frAcctYrmon = frAcctYrmon;
 	}
 
-	public String getAcctYrmonTo() {
-		return acctYrmonTo;
+	public String getToAcctYrmon() {
+		return toAcctYrmon;
 	}
 
-	public void setAcctYrmonTo(String acctYrmonTo) {
-		this.acctYrmonTo = acctYrmonTo;
+	public void setToAcctYrmon(String toAcctYrmon) {
+		this.toAcctYrmon = toAcctYrmon;
 	}
 
 	public String getTrdCd() {
@@ -493,6 +494,8 @@ public class InvoiceDetailVO extends AbstractValueObject {
 		fromRequest(request, "");
 	}
 
+	
+
 	/**
 	 * Request 의 데이터를 추출하여 VO 의 멤버변수에 설정.
 	 * 
@@ -521,9 +524,11 @@ public class InvoiceDetailVO extends AbstractValueObject {
 		setItem(JSPUtil.getParameter(request, prefix + "item", ""));
 		setPrnrRefNo(JSPUtil.getParameter(request, prefix + "prnr_ref_no", ""));
 		setAproFlg(JSPUtil.getParameter(request, prefix + "apro_flg", ""));
-		setAproFlg(JSPUtil.getParameter(request, prefix + "acct_yrmon_fr", ""));
-		setAproFlg(JSPUtil.getParameter(request, prefix + "acct_yrmon_to", ""));
-		setAproFlg(JSPUtil.getParameter(request, prefix + "trd_cd", ""));
+		setFrAcctYrmon(JSPUtil.getParameter(request, prefix + "fr_acct_yrmon",
+				""));
+		setToAcctYrmon(JSPUtil.getParameter(request, prefix + "to_acct_yrmon",
+				""));
+		setTrdCd(JSPUtil.getParameter(request, prefix + "trd_cd", ""));
 	}
 
 	/**
@@ -586,10 +591,10 @@ public class InvoiceDetailVO extends AbstractValueObject {
 					+ "prnr_ref_no", length));
 			String[] aproFlg = (JSPUtil.getParameter(request, prefix
 					+ "apro_flg", length));
-			String[] acctYrmonFr = (JSPUtil.getParameter(request, prefix
-					+ "acct_yrmon_fr", length));
-			String[] acctYrmonTo = (JSPUtil.getParameter(request, prefix
-					+ "acct_yrmon_to", length));
+			String[] frAcctYrmon = (JSPUtil.getParameter(request, prefix
+					+ "fr_acct_yrmon", length));
+			String[] toAcctYrmon = (JSPUtil.getParameter(request, prefix
+					+ "to_acct_yrmon", length));
 			String[] trdCd = (JSPUtil.getParameter(request, prefix + "trd_cd",
 					length));
 
@@ -627,12 +632,12 @@ public class InvoiceDetailVO extends AbstractValueObject {
 					model.setPrnrRefNo(prnrRefNo[i]);
 				if (aproFlg[i] != null)
 					model.setAproFlg(aproFlg[i]);
-				if (acctYrmonFr[i] != null)
-					model.setAproFlg(acctYrmonFr[i]);
-				if (acctYrmonTo[i] != null)
-					model.setAproFlg(acctYrmonTo[i]);
+				if (frAcctYrmon[i] != null)
+					model.setFrAcctYrmon(frAcctYrmon[i]);
+				if (toAcctYrmon[i] != null)
+					model.setToAcctYrmon(toAcctYrmon[i]);
 				if (trdCd[i] != null)
-					model.setAproFlg(trdCd[i]);
+					model.setTrdCd(trdCd[i]);
 				models.add(model);
 			}
 
@@ -697,9 +702,9 @@ public class InvoiceDetailVO extends AbstractValueObject {
 				.replaceAll("/", "").replaceAll(":", "");
 		this.aproFlg = this.aproFlg.replaceAll(",", "").replaceAll("-", "")
 				.replaceAll("/", "").replaceAll(":", "");
-		this.acctYrmonFr = this.acctYrmonFr.replaceAll(",", "")
+		this.frAcctYrmon = this.frAcctYrmon.replaceAll(",", "")
 				.replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
-		this.acctYrmonTo = this.acctYrmonTo.replaceAll(",", "")
+		this.toAcctYrmon = this.toAcctYrmon.replaceAll(",", "")
 				.replaceAll("-", "").replaceAll("/", "").replaceAll(":", "");
 		this.trdCd = this.trdCd.replaceAll(",", "").replaceAll("-", "")
 				.replaceAll("/", "").replaceAll(":", "");

@@ -56,9 +56,9 @@ public class CLV_TRN_0003HTMLAction extends HTMLActionSupport {
 		// Command 01, we will get data detail for downExcel
 		if (command.isCommand(FormCommand.COMMAND01)) {
 			InvoiceDetailVO invoiceDetailVO = new InvoiceDetailVO();
-			invoiceDetailVO.setAcctYrmonFr(JSPUtil.getParameter(request,
+			invoiceDetailVO.setFrAcctYrmon(JSPUtil.getParameter(request,
 					"fr_acct_yrmon", ""));
-			invoiceDetailVO.setAcctYrmonTo(JSPUtil.getParameter(request,
+			invoiceDetailVO.setToAcctYrmon(JSPUtil.getParameter(request,
 					"to_acct_yrmon", ""));
 			invoiceDetailVO.setJoCrrCd(JSPUtil.getParameter(request,
 					"s_jo_crr_cd", ""));
