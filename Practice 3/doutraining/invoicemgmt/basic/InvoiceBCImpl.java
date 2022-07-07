@@ -22,7 +22,12 @@ public class InvoiceBCImpl implements InvoiceBC {
 	public InvoiceBCImpl() {
 		invoiceDBDAO = new InvoiceDBDAO();
 	}
-
+	/**
+	 * 
+	 * @param invoiceCarrierVO
+	 * @return List Summary
+	 * @throws EventException
+	 */
 	@Override
 	public List<InvoiceVO> searchInvoiceVO(InvoiceCarrierVO invoiceCarrierVO)
 			throws EventException {
@@ -44,7 +49,11 @@ public class InvoiceBCImpl implements InvoiceBC {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
 	}
-
+	/**
+	 * 
+	 * @return List Partner
+	 * @throws EventException
+	 */
 	@Override
 	public List<InvoiceVO> searchPartner() throws EventException {
 		try {
@@ -53,20 +62,45 @@ public class InvoiceBCImpl implements InvoiceBC {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
 	}
-
+	/**
+	 * 
+	 * @param invoiceList
+	 * @param rlane
+	 * @return List Trade
+	 * @throws EventException
+	 */
 	@Override
 	public List<InvoiceTradeVO> searchTrade(ArrayList<String> invoiceList,
 			String rlane) throws EventException {
-		// TODO Auto-generated method stub
-		return invoiceDBDAO.searchTrade(invoiceList, rlane);
+		try {
+			return invoiceDBDAO.searchTrade(invoiceList, rlane);
+		} catch (Exception ex) {
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
+		}
+	
 	}
-
+	/**
+	 * 
+	 * @param invoiceList
+	 * @return  List Lane
+	 * @throws EventException
+	 */
 	@Override
 	public List<InvoiceVO> searchLane(ArrayList<String> invoiceList)
 			throws EventException {
-		return invoiceDBDAO.searchLane(invoiceList);
+	
+		try {
+			return invoiceDBDAO.searchLane(invoiceList);
+		} catch (Exception ex) {
+			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
+		}
 	}
-
+	/**
+	 * 
+	 * @param invoiceCarrier
+	 * @return	List Detail
+	 * @throws EventException
+	 */
 	@Override
 	public List<InvoiceDetailVO> searchInvoiceDetailVO(
 			InvoiceCarrierVO invoiceCarrier) throws EventException {
@@ -88,7 +122,12 @@ public class InvoiceBCImpl implements InvoiceBC {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
 	}
-
+	/**
+	 * 
+	 * @param invoiceDetailVO
+	 * @return sheet Detail get Download
+	 * @throws EventException
+	 */
 	@Override
 	public List<Object> searchDown2Excel(InvoiceDetailVO invoiceDetailVO)
 			throws EventException {

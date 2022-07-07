@@ -19,7 +19,9 @@ public class Down2ExcelViewAdapter extends ViewAdapter {
 	public Down2ExcelViewAdapter() {
 
 	}
-
+	/**
+	 * call DirectDown2Excel make xml to download
+	 */
 	public String makeXML(HttpServletRequest request,
 			HttpServletResponse response) {
 		GeneralEventResponse eventResponse = (GeneralEventResponse) request

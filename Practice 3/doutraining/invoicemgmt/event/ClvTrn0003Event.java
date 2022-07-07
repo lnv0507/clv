@@ -13,15 +13,6 @@ public class ClvTrn0003Event extends EventSupport {
 	InvoiceTradeVO invoiceTradeVO = null;
 	InvoiceCarrierVO invoiceCarrierVO = null;
 	InvoiceDetailVO invoiceDetailVO = null;
-	String loadComboBox = null;
-
-	public String getLoadComboBox() {
-		return loadComboBox;
-	}
-
-	public void setLoadComboBox(String loadComboBox) {
-		this.loadComboBox = loadComboBox;
-	}
 
 	public InvoiceDetailVO getInvoiceDetailVO() {
 		return invoiceDetailVO;

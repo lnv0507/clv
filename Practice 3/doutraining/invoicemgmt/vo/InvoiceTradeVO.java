@@ -12,7 +12,14 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.clt.framework.component.common.AbstractValueObject;
 import com.clt.framework.component.util.JSPUtil;
-
+/**
+ * Table Value Object<br>
+ * Value object that is created in the related event and performs the role of data delivery when requesting server execution
+ *
+ * @author
+ * @since J2EE 1.6
+ * @see AbstractValueObject
+ */
 public class InvoiceTradeVO extends AbstractValueObject {
 	private static final long serialVersionUID = 1L;
 

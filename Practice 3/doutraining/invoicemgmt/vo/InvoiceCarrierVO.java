@@ -27,14 +27,13 @@ import com.clt.framework.component.common.AbstractValueObject;
 import com.clt.framework.component.util.JSPUtil;
 
 /**
- * Table Value Ojbect<br>
- * 관련 Event 에서 생성, 서버실행요청시 Data 전달역할을 수행하는 Value Object
+ * Table Value Object<br>
+ * Value object that is created in the related event and performs the role of data delivery when requesting server execution
  *
  * @author
  * @since J2EE 1.6
  * @see AbstractValueObject
  */
-
 public class InvoiceCarrierVO extends AbstractValueObject {
 
 	private static final long serialVersionUID = 1L;

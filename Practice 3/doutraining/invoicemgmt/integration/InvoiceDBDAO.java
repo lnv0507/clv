@@ -19,6 +19,13 @@ import com.clt.framework.support.db.SQLExecuter;
 import com.clt.framework.support.layer.integration.DBDAOSupport;
 
 public class InvoiceDBDAO extends DBDAOSupport {
+	/**
+	 * 
+	 * @param invoiceCarrierVO
+	 * @param invoiceList
+	 * @return Data Summary
+	 * @throws DAOException
+	 */
 	@SuppressWarnings("unchecked")
 	public List<InvoiceVO> searchInvoiceVO(InvoiceCarrierVO invoiceCarrierVO,
 			ArrayList<String> invoiceList) throws DAOException {
@@ -56,7 +63,10 @@ public class InvoiceDBDAO extends DBDAOSupport {
 		}
 		return list;
 	}
-
+	/**
+	 * 
+	 * @return data Search Partner
+	 */
 	@SuppressWarnings("unchecked")
 	public List<InvoiceVO> searchPartner() {
 		DBRowSet dbRowset = null;
@@ -73,7 +83,11 @@ public class InvoiceDBDAO extends DBDAOSupport {
 		}
 		return list;
 	}
-
+	/**
+	 * 
+	 * @param invoiceList
+	 * @return search partner return data lane
+	 */
 	@SuppressWarnings("unchecked")
 	public List<InvoiceVO> searchLane(ArrayList<String> invoiceList) {
 		DBRowSet dbRowset = null;
@@ -100,7 +114,12 @@ public class InvoiceDBDAO extends DBDAOSupport {
 		}
 		return list;
 	}
-
+	/**
+	 * 
+	 * @param invoiceList
+	 * @param rlane
+	 * @return search rlane return List trade
+	 */
 	@SuppressWarnings("unchecked")
 	public List<InvoiceTradeVO> searchTrade(ArrayList<String> invoiceList,
 			String rlane) {
@@ -130,7 +149,13 @@ public class InvoiceDBDAO extends DBDAOSupport {
 		}
 		return list;
 	}
-
+	/**
+	 * 
+	 * @param invoiceCarrier
+	 * @param invoiceList
+	 * @return search Detail 
+	 * @throws DAOException
+	 */
 	@SuppressWarnings("unchecked")
 	public List<InvoiceDetailVO> searchInvoiceDetailVO(
 			InvoiceCarrierVO invoiceCarrier, ArrayList<String> invoiceList)
@@ -170,7 +195,12 @@ public class InvoiceDBDAO extends DBDAOSupport {
 		}
 		return list;
 	}
-
+	/**
+	 * 
+	 * @param invoiceDetailVO
+	 * @return data detail on server return data download
+	 * @throws DAOException
+	 */
 	public DBRowSet searchDown2Excel(InvoiceDetailVO invoiceDetailVO)
 			throws DAOException {
 		DBRowSet dbRowset = null;

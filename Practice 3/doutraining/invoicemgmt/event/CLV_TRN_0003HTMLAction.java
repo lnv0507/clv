@@ -19,6 +19,9 @@ public class CLV_TRN_0003HTMLAction extends HTMLActionSupport {
 
 	}
 
+	/**
+	 * perform
+	 */
 	@Override
 	public Event perform(HttpServletRequest request) throws HTMLActionException {
 		FormCommand command = FormCommand.fromRequest(request);
@@ -32,24 +35,26 @@ public class CLV_TRN_0003HTMLAction extends HTMLActionSupport {
 			event.setInvoiceCarrierVO(invoiceCarrier);
 		}
 		// SEARCH01 , we will get data for land combo box
-		else if (command.isCommand(FormCommand.SEARCH01)) {
+		if (command.isCommand(FormCommand.SEARCH01)) {
 			InvoiceVO invoice = new InvoiceVO();
 			invoice.setJoCrrCd(JSPUtil.getParameter(request, "s_jo_crr_cd", ""));
 			event.setInvoiceVO(invoice);
 		}
 		// SEARCH02 , we will get data for trade combo box
-		else if (command.isCommand(FormCommand.SEARCH02)) {
+		if (command.isCommand(FormCommand.SEARCH02)) {
 			InvoiceVO invoice = new InvoiceVO();
 			invoice.setJoCrrCd(JSPUtil.getParameter(request, "s_jo_crr_cd", ""));
 			invoice.setRlaneCd(JSPUtil.getParameter(request, "s_rlane_cd", ""));
 			event.setInvoiceVO(invoice);
 		}
 		// SEARCH03 , we will search data for detail grid
-		else if (command.isCommand(FormCommand.SEARCH03)) {
+		if (command.isCommand(FormCommand.SEARCH03)) {
 			InvoiceCarrierVO invoiceCarrier = (InvoiceCarrierVO) getVO(request,
 					InvoiceCarrierVO.class, "");
 			event.setInvoiceCarrierVO(invoiceCarrier);
-		} else if (command.isCommand(FormCommand.COMMAND01)) {
+		}
+		// Command 01, we will get data detail for downExcel
+		if (command.isCommand(FormCommand.COMMAND01)) {
 			InvoiceDetailVO invoiceDetailVO = new InvoiceDetailVO();
 			invoiceDetailVO.setAcctYrmonFr(JSPUtil.getParameter(request,
 					"fr_acct_yrmon", ""));

@@ -9,6 +9,12 @@ let tabObjects = new Array();
 let tabCnt = 0;
 let beforetab = 0;
 
+let isTrueType = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCode) => {
+	
+	let arrAssign = [OldText, OldIndex, OldCode, NewText, NewIndex, NewCode];
+	
+	if(arrAssign.some(value => typeof value != "string" )) return;
+}
 
 /**
  * Registering IBCombo Object as list parameter : combo_obj adding process for
@@ -33,33 +39,41 @@ let setSheetObject = (sheet_obj) => {
 }
 /**
  * Sharing Object into tab
+ * 
  * @param tab_obj:
  *            String - tab name.
  */
 let setTabObject = (tab_obj) => {
 	tabObjects[tabCnt++] = tab_obj;
 }
-
+/**
+ * format date
+ */
 let getDateFormat = (obj, sFormat) => {
+	
+	
 	let sVal = String(getArgValue(obj));
 	sVal = sVal.replace(/\/|\-|\.|\:|\ /g, "");
 	if (ComIsEmpty(sVal))
 		return "";
-
+console.log(sVal);
 	let retValue = "";
 	switch (sFormat) {
 	case "ym":
 		retValue = sVal.substring(0, 6);
+		console.log(retValue);
 		break;
 	}
 	retValue = ComGetMaskedValue(retValue, sFormat);
+	console.log(retValue);
 	return retValue;
 }
-//Get month and year to present
-//if from month = month to - 2 because avoid over 3month
+// Get month and year to present
+// if from month = month to - 2 because avoid over 3month
 let initCalendar = () => {
 	let formObj = document.form;
 	let ymTo = ComGetNowInfo("ym", "-");
+	
 	formObj.to_acct_yrmon.value = ymTo;
 	let ymFrom = ComGetDateAdd(formObj.to_acct_yrmon.value + "-01", "M", -2);
 	formObj.fr_acct_yrmon.value = getDateFormat(ymFrom, "ym");
@@ -69,6 +83,7 @@ let checkOver3Month = () => {
 	let formObj = document.form;
 	let fromDate = formObj.fr_acct_yrmon.value.replaceStr("-", "") + "01";
 	let toDate = formObj.to_acct_yrmon.value.replaceStr("-", "") + "01";
+	
 	if (ComGetDaysBetween(fromDate, toDate) > 88)
 		return false;
 	return true;
@@ -83,7 +98,9 @@ let isValidDate = () => {
 
 // handle month when press previos or next -> +- 1 value month
 let changeMonth = (obj, month) => {
-	if(obj.value === "" ) return;
+	
+	if(obj.value === "") return;
+	
 	if(obj.value != "") {
 		obj.value = ComGetDateAdd(obj.value + "-01", "M", month).substr(0, 7);
 	}
@@ -103,6 +120,9 @@ let getSearchOption = () => {
 }
 
 let doActionIBSheet = (sheetObj, formObj, sAction) => {
+	
+	if(typeof sheetObj != "object") return;
+	
 	// ComOpenWait(true);
 	switch (sAction) {
 	// Retrieve button event.
@@ -174,7 +194,7 @@ let doActionIBSheet = (sheetObj, formObj, sAction) => {
 	}
 }
 
-//reset all sheet and input
+// reset all sheet and input
 let onclickButtonNew = () => {
 	ComResetAll();
 	initCalendar();
@@ -197,6 +217,8 @@ let getCurrentSheet = () => {
  */
 let processButtonClick = () => {
 	let formObj = document.form;
+	let fromDate = "From Date";
+	let toDate = "To Date"
 	try {
 		let srcName = ComGetEvent("name");
 		// Get event by name which corresponding to button.
@@ -206,7 +228,7 @@ let processButtonClick = () => {
 			// if over 3 months
 			if (!checkOver3Month()) {
 				// the variable to store user's choose
-				confirm("Year Month over 3 months, do you realy want to get data?");
+				ComShowCodeConfirm("COM12173", "Date", "3 Month");
 			}
 		doActionIBSheet(getCurrentSheet(), formObj, IBSEARCH);
 		break;
@@ -220,7 +242,7 @@ let processButtonClick = () => {
 			// month + 1
 		case "btn_from_next":
 			if (!isValidDate()) {
-				ComShowMessage("Start date must be earlier than end date");
+				ComShowCodeMessage("COM12133",toDate, fromDate);
 				break;
 			}
 			changeMonth(formObj.fr_acct_yrmon, 1);
@@ -230,7 +252,7 @@ let processButtonClick = () => {
 			// month -1
 		case "btn_vvd_to_back":
 			if (!isValidDate()) {
-				ComShowMessage("Start date must be earlier than end date");
+				ComShowCodeMessage("COM12133", fromDate, toDate);
 				break;
 			}
 			changeMonth(formObj.to_acct_yrmon, -1);
@@ -257,14 +279,14 @@ let processButtonClick = () => {
 		}
 	} catch (e) {
 		if (e == "[object Error]") {
-			ComShowCodeMessage('JOO00001');
+			ComShowCodeMessage(OBJECT_ERROR);
 		} else {
 			ComShowMessage(e.message);
 		}
 	}
 }
 // ONCLICK BUTTON
-// EVENT 
+// EVENT
 document.onclick = processButtonClick;
 
 /**
@@ -274,11 +296,14 @@ document.onclick = processButtonClick;
  * @param comboItems
  */
 let addComboItem = (comboObj, comboItems) => {
+	
+	if(typeof comboObj === 'undefined' || !Array.isArray(comboItems)) return;
+	
 	let assignComboItems = [...comboItems];
 	console.log(assignComboItems);
 	assignComboItems.forEach((item, index)=>{
 		let comboItem = assignComboItems[index].split(",");
-//		console.log(comboItem);
+// console.log(comboItem);
 		if(comboItem.length === 1) {
 			comboObj.InsertItem(index, comboItem[0], comboItem[0]);
 		} 
@@ -297,7 +322,9 @@ let addComboItem = (comboObj, comboItems) => {
  *            Number of IBMultiCombo Object.
  */
 let initCombo = (comboObj, comboNo) => {
+	
 	if(typeof comboObj === 'undefined') return;
+	
 	let formObj = document.form;
 	switch (comboNo) {
 	case 1:
@@ -429,6 +456,9 @@ let initSheet = (sheetObj) => {
 			break;
 	}
 }
+/**
+ * split tab
+ */
 let initTab = (tabObj, tabNo) => {
 	switch (tabNo) {
 	case 1:
@@ -449,6 +479,10 @@ let loadPage = () => {
 	let assignTabObject = [...tabObjects];
 	let assignSheetObjects = [...sheetObjects];
 	let assignComboObjects = [...comboObjects];
+	
+	let assignObject = [assignTabObject, assignSheetObjects, assignComboObjects];
+	
+	if(assignObject.some(value => !Array.isArray(value))) return;
 	// generate Grid Layout
 	
 	assignTabObject.forEach((value, index)=>{
@@ -487,6 +521,9 @@ let loadPage = () => {
  * @returns data
  */
 let getDataRow = (sheetObj, row, saveNames) => {
+	
+	if(typeof sheetObj != "object" || !Array.isArray(saveNames)) return;
+	
 	let result = "";
 	let assignSaveNames = [...saveNames];
 	
@@ -509,11 +546,12 @@ let changeTab = () => {
 	console.log(searchDetail);
 	
 	if(searchSummary != formQuery && formQuery != searchDetail) {
-		confirm("WARNING!!! Data was changed on sheet. Do you want retrieve?");
+		ComShowCodeConfirm("COM130504");
 		doActionIBSheet(currentSheet, document.form, IBSEARCH);
 		return;
 	}
-	if (currentSheet.id == "sheet1" && searchSummary != formQuery) {// in summary
+	if (currentSheet.id == "sheet1" && searchSummary != formQuery) {// in
+																	// summary
 		doActionIBSheet(currentSheet, document.form, IBSEARCH)
 		return;
 	} 
@@ -551,6 +589,9 @@ var tab1_OnChange = (tabObj, nItem) => {
  *            Long - Column index of the cell.
  */
 var sheet1_OnDblClick = (sheetObj, Row, Col) => {
+	
+	if(typeof sheetObj != "object" ) return;
+	
 	if (sheetObjects[1].RowCount() == 0) {
 		doActionIBSheet(sheetObjects[1], document.form, IBSEARCH);
 	}
@@ -559,37 +600,45 @@ var sheet1_OnDblClick = (sheetObj, Row, Col) => {
 		let saveNames = [ "jo_crr_cd", "rlane_cd", "inv_no", "csr_no", "locl_curr_cd", "prnr_ref_no" ];
 		let summaryData = getDataRow(sheet1, Row, saveNames);
 		let size = sheet2.RowCount();
-		for (let i = 2; i <= size; i++) {
-			console.log(getDataRow(sheet2, i, saveNames));
-			if (summaryData == getDataRow(sheet2, i, saveNames)) {
+		// sheetObj.HeaderRows() = size Header
+		for (let i = sheetObj.HeaderRows(); i <= size; i++) {
+			let detailData = getDataRow(sheet2, i, saveNames);
+// console.log(getDataRow(sheet2, i, saveNames));
+			// getDataRow(sheet2, i, saveNames) = SUM String ROW
+			if (summaryData === detailData) {
 				tab1_OnChange(tabObjects[1], 1);
 				sheetObjects[1].SetSelectRow(i);
 				return;
 			}
 		}
-		ComShowCodeMessage('COM132701');
+		ComShowCodeMessage("COM132701");
 	}
 }
 
+// Total Sum
 let subsumTotalSum = (sheetObj) => {
-	let rowLast = sheetObj.LastRow() -1; // but -1 because LastRow = total last when hidden this return rowLast
+	
+	if(typeof sheetObj != "object") return;
+	
+	let rowLast = sheetObj.LastRow() -1; // but -1 because LastRow = total
+											// last when hidden this return
+											// rowLast
 	if (sheetObj.RowCount() > 0) {
 		sheetObj.SetRowHidden(sheetObj.LastRow(),1); // hide totalsum LAST
 		/*
-		 * Return the row index of the last row.
-			Using this method will return the index of the very last row, not just last data row or the last row 
-			as displayed in the screen.
-			Note that the last row may be a sum row, data row or even a header row.
+		 * Return the row index of the last row. Using this method will return
+		 * the index of the very last row, not just last data row or the last
+		 * row as displayed in the screen. Note that the last row may be a sum
+		 * row, data row or even a header row.
 		 */
 	}
 	console.log( sheetObj.HeaderRows());
 	/*
-	 * HeaderRows:
-	 * Check header row count.
-		This method returns the header row counts as set in InitHeaders() method.
+	 * HeaderRows: Check header row count. This method returns the header row
+	 * counts as set in InitHeaders() method.
 	 */
 	for (let i = sheetObj.HeaderRows(); i <= sheetObj.LastRow(); i++) {
-		if (sheetObj.GetCellValue(i, "jo_crr_cd") == '') {
+		if (sheetObj.GetCellValue(i, "jo_crr_cd") === '') {
 			sheetObj.SetCellValue(i, "inv_no", "");
 			sheetObj.SetCellValue(i, "locl_curr_cd", 
 			sheetObj.GetCellValue(i-1, "locl_curr_cd"));
@@ -613,6 +662,9 @@ var sheet2_OnSearchEnd = (sheetObj, Code, Msg, StCode, StMsg) => {
 
 
 let initComboBoxLane = (laneList) => {
+	
+	if(typeof laneList != "string") return;
+	
 	let formObj = document.form;
 	with (comboObjects[1]) {
 		RemoveAll();
@@ -624,6 +676,11 @@ let initComboBoxLane = (laneList) => {
 }
 
 var s_jo_crr_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCode) => {
+	
+	let newIndexArr = OldIndex != 0 ? NewIndex.split(",") : "";
+	
+	isTrueType(OldText, OldIndex, OldCode, NewText, NewIndex, NewCode);
+	
 	// handling events when user checks all item partner's combo
 	if (OldIndex == 0) {
 		s_jo_crr_cd.SetItemCheck(0, 0, 0);
@@ -635,17 +692,17 @@ var s_jo_crr_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCo
 		s_trd_cd.RemoveAll();
 		s_trd_cd.SetEnable(false);
 	} 
-	if (OldIndex != 0) {
-		let newIndexArr = NewIndex.split(",");
-		if (newIndexArr[newIndexArr.length - 1] == 0 && OldIndex != -1) {
-			newIndexArr.forEach((value)=>{
-				let location = parseInt(value);
-				s_jo_crr_cd.SetItemCheck(location, 0, 0);
-			});
-			s_jo_crr_cd.SetItemCheck(0, 1, 0);
-			s_rlane_cd.RemoveAll();
-			s_rlane_cd.SetEnable(false);
-		}
+	if (newIndexArr[newIndexArr.length - 1] == 0 && OldIndex != -1) {
+		
+		newIndexArr.forEach((value)=>{
+		let location = parseInt(value);
+		s_jo_crr_cd.SetItemCheck(location, 0, 0);
+		});
+		
+		s_jo_crr_cd.SetItemCheck(0, 1, 0);
+		s_rlane_cd.RemoveAll();
+		s_rlane_cd.SetEnable(false);
+		
 	}
 	// when user check item form combo , combo rlane will be loaded data
 	let formObj = document.form;
@@ -654,8 +711,13 @@ var s_jo_crr_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCo
 	let laneList = ComGetEtcData(xml, "lane");
 	initComboBoxLane(laneList);
 }
-
+/**
+ * 
+ */
 let initComboBoxTrade = (tradeList) => {
+	
+	if(typeof tradeList != "string") return;
+	
 	let formObj = document.form;
 
 	with (comboObjects[2]) {
@@ -666,9 +728,13 @@ let initComboBoxTrade = (tradeList) => {
 	let comboItems = tradeList.split("|");
 	addComboItem(comboObjects[2], comboItems);
 }
-
+/**
+ * 
+ */
 var s_rlane_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCode) => {
 
+	isTrueType(OldText, OldIndex, OldCode, NewText, NewIndex, NewCode);
+	
 	if (NewCode.length === 0){
 		s_trd_cd.SetEnable(false);
 		return;
@@ -689,6 +755,8 @@ var s_rlane_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCod
 // trade still unable
 var s_jo_crr_cd_OnCheckClick = (sheetObj, Index, Code) => {
 	
+	if(typeof sheetObj != "object" || typeof Index != "number" || typeof Code != "string") return;
+	
 	if (Code != "ALL") {
 		s_rlane_cd.SetEnable(true);
 		return;
@@ -702,9 +770,6 @@ var s_jo_crr_cd_OnCheckClick = (sheetObj, Index, Code) => {
 }
 
 
-
-
-
 /**
  * 
  * @param downloadType
@@ -713,21 +778,19 @@ var s_jo_crr_cd_OnCheckClick = (sheetObj, Index, Code) => {
  */
 var sheet1_OnDownFinish = (sheetObj, downloadType, result) => {
 	
-	if(typeof downloadType != "String" && typeof result != "boolean") return;
+	if(typeof sheetObj != "object" || typeof downloadType != "string" && typeof result != "boolean") return;
 	
 	ComOpenWait(false);
-	if(!result) {
-		return ComShowCodeMessage("COM131102", "data");
-	}
-	return ComShowCodeMessage("COM131101", "data");
+	if(!result)
+		return ComShowCodeMessage("COM131102", "Sheet");
+	return ComShowCodeMessage("COM131101", "Sheet");
 }
 var sheet2_OnDownFinish = (sheetObj, downloadType, result) => {
 	
-	if(typeof downloadType != "String" && typeof result != "boolean") return;
+	if(typeof sheetObj != "object" || typeof downloadType != "string" && typeof result != "boolean") return;
 	
 	ComOpenWait(false);
-	if(!result) {
-		return ComShowCodeMessage("COM131102", "data");
-	} 
-	return ComShowCodeMessage("COM131101", "data");
+	if(!result)
+		return ComShowCodeMessage("COM131102", "Sheet");
+	return ComShowCodeMessage("COM131101", "Sheet");
 }

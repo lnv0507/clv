@@ -75,56 +75,83 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		log.debug("DouTrainingSC end");
 	}
 
+	/**
+	 * 
+	 */
 	public EventResponse perform(Event e) throws EventException {
 		// RDTO(Data Transfer Object including Parameters)
 		EventResponse eventResponse = null;
 
-		// SC가 여러 이벤트를 처리하는 경우 사용해야 할 부분
+		// Search Practice 2
+		// The part to use when SC handles multiple events
 		if (e.getEventName().equalsIgnoreCase("ClvTrn0002Event")) {
 			if (e.getFormCommand().isCommand(FormCommand.SEARCH)) {
 				eventResponse = searchMaster(e);
-			} else if (e.getFormCommand().isCommand(FormCommand.MULTI)) {
+			}
+			if (e.getFormCommand().isCommand(FormCommand.MULTI)) {
 				eventResponse = manageMaster(e);
-			} else if (e.getFormCommand().isCommand(FormCommand.MULTI01)) {
+			}
+			if (e.getFormCommand().isCommand(FormCommand.MULTI01)) {
 				eventResponse = manageDetail(e);
-			} else if (e.getFormCommand().isCommand(FormCommand.SEARCH01)) {
+			}
+			if (e.getFormCommand().isCommand(FormCommand.SEARCH01)) {
 				eventResponse = searchDetail(e);
 			}
 		}
 		/**
-		 * If Event 0004 Search: get Dosearch of client call dtb DEFAULT:
-		 * GetData for Combo box on client MULTI: doing Multi function of event
+		 * Search Practice 4 If Event 0004 Search: get Dosearch of client call
+		 * dtb DEFAULT: GetData for Combo box on client MULTI: doing Multi
+		 * function of event
 		 */
 		if (e.getEventName().equalsIgnoreCase("ClvTrn0004Event")) {
 			if (e.getFormCommand().isCommand(FormCommand.SEARCH)) {
 				eventResponse = searchCarrier(e);
-			} else if (e.getFormCommand().isCommand(FormCommand.DEFAULT)) {
+			}
+			if (e.getFormCommand().isCommand(FormCommand.DEFAULT)) {
 				eventResponse = initCombox();
-			} else if (e.getFormCommand().isCommand(FormCommand.MULTI)) {
+			}
+			if (e.getFormCommand().isCommand(FormCommand.MULTI)) {
 				eventResponse = manageCarrier(e);
-			} else if (e.getFormCommand().isCommand(FormCommand.SEARCH01)) {
+			}
+			if (e.getFormCommand().isCommand(FormCommand.SEARCH01)) {
 				eventResponse = searchCustomer(e);
 			}
 
 		}
+		/**
+		 * Search Practice 3 If Event 0003 Search: get Dosearch of client call
+		 * dtb DEFAULT: GetData for Combo box on client MULTI: doing Multi
+		 * function of event
+		 */
 		if (e.getEventName().equalsIgnoreCase("ClvTrn0003Event")) {
 			if (e.getFormCommand().isCommand(FormCommand.SEARCH)) {
 				eventResponse = searchInvoice(e);
-			} else if (e.getFormCommand().isCommand(FormCommand.DEFAULT)) {
+			}
+			if (e.getFormCommand().isCommand(FormCommand.DEFAULT)) {
 				eventResponse = initData();
-			} else if (e.getFormCommand().isCommand(FormCommand.SEARCH01)) {
+			}
+			if (e.getFormCommand().isCommand(FormCommand.SEARCH01)) {
 				eventResponse = searchLane(e);
-			} else if (e.getFormCommand().isCommand(FormCommand.SEARCH02)) {
+			}
+			if (e.getFormCommand().isCommand(FormCommand.SEARCH02)) {
 				eventResponse = searchTrade(e);
-			} else if (e.getFormCommand().isCommand(FormCommand.SEARCH03)) {
+			}
+			if (e.getFormCommand().isCommand(FormCommand.SEARCH03)) {
 				eventResponse = searchInvoiceDetail(e);
-			} else if (e.getFormCommand().isCommand(FormCommand.COMMAND01)) {
+			}
+			if (e.getFormCommand().isCommand(FormCommand.COMMAND01)) {
 				eventResponse = searchDown2Excel(e);
 			}
 		}
 		return eventResponse;
 	}
 
+	/**
+	 * 
+	 * @param e
+	 * @return data Detail for Download Search
+	 * @throws EventException
+	 */
 	private EventResponse searchDown2Excel(Event e) throws EventException {
 		// TODO Auto-generated method stub
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
@@ -142,7 +169,7 @@ public class DouTrainingSC extends ServiceCommandSupport {
 	/**
 	 * 
 	 * @param e
-	 * @return
+	 * @return search Summary get Data load on sheet
 	 * @throws EventException
 	 */
 	private EventResponse searchInvoice(Event e) throws EventException {
@@ -159,6 +186,11 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		return eventResponse;
 	}
 
+	/**
+	 * 
+	 * @return search Partner and set ETC data on View
+	 * @throws EventException
+	 */
 	private EventResponse initData() throws EventException {
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
 		InvoiceBC command = new InvoiceBCImpl();
@@ -180,6 +212,12 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		return eventResponse;
 	}
 
+	/**
+	 * 
+	 * @param e
+	 * @return Search Lane and set ETC data for view
+	 * @throws EventException
+	 */
 	private EventResponse searchLane(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
@@ -216,6 +254,12 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		return eventResponse;
 	}
 
+	/**
+	 * 
+	 * @param e
+	 * @return search Trade return data Trade and set ETC data for view
+	 * @throws EventException
+	 */
 	private EventResponse searchTrade(Event e) throws EventException {
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
 		ClvTrn0003Event event = (ClvTrn0003Event) e;
@@ -251,6 +295,12 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		return eventResponse;
 	}
 
+	/**
+	 * 
+	 * @param e
+	 * @return Search Detail return data detail on sheet detail
+	 * @throws EventException
+	 */
 	private EventResponse searchInvoiceDetail(Event e) throws EventException {
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
 		ClvTrn0003Event event = (ClvTrn0003Event) e;
@@ -291,6 +341,12 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		return eventResponse;
 	}
 
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 * @throws EventException
+	 */
 	private EventResponse searchDetail(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
@@ -309,6 +365,12 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		return eventResponse;
 	}
 
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 * @throws EventException
+	 */
 	private EventResponse manageMaster(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
@@ -330,6 +392,12 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		return eventResponse;
 	}
 
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 * @throws EventException
+	 */
 	private EventResponse manageDetail(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
@@ -352,7 +420,7 @@ public class DouTrainingSC extends ServiceCommandSupport {
 	}
 
 	/**
-	 * CLV_TRN_0004 : [Event]<br>
+	 * Practice 4 CLV_TRN_0004 : [Event]<br>
 	 * [Act] for [Business Target].<br>
 	 *
 	 * @param Event
