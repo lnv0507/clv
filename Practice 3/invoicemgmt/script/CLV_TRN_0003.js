@@ -230,6 +230,7 @@ let processButtonClick = () => {
 			if (!checkOver3Month()) {
 				// the variable to store user's choose
 				ComShowCodeConfirm("COM12173", "Date", "3 Month");
+				return;
 			}
 		doActionIBSheet(getCurrentSheet(), formObj, IBSEARCH);
 		break;
@@ -548,9 +549,11 @@ let changeTab = () => {
 //	console.log(searchDetail);
 	
 	if(searchSummary != formQuery && formQuery != searchDetail) {
-		ComShowCodeConfirm("COM130504");
-		doActionIBSheet(currentSheet, document.form, IBSEARCH);
-		return;
+		if(!ComShowCodeConfirm("COM130504")) return;
+			console.log("check123");
+			doActionIBSheet(currentSheet, document.form, IBSEARCH);
+			return;
+		
 	}
 	if (currentSheet.id == "sheet1" && searchSummary != formQuery) {// in
 																	// summary
@@ -562,7 +565,7 @@ let changeTab = () => {
 		return;
 	}
 	
-	if(currentSheet.id == "sheet2"){
+	if(currentSheet.id === "sheet2"){
 		doActionIBSheet(currentSheet, document.form, IBSEARCH);
 		return;
 	}
@@ -690,9 +693,13 @@ let initComboBoxLane = (laneList) => {
 
 var s_jo_crr_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCode) => {
 	
-	let newIndexArr = OldIndex != 0 ? NewIndex.split(",") : "";
+
+	let newIndexArr = [];
+	
 	
 	isTrueType(OldText, OldIndex, OldCode, NewText, NewIndex, NewCode);
+	
+
 	
 	// handling events when user checks all item partner's combo
 	if (OldIndex == 0) {
@@ -705,6 +712,13 @@ var s_jo_crr_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCo
 		s_trd_cd.RemoveAll();
 		s_trd_cd.SetEnable(false);
 	} 
+	if(OldIndex != 0 ){
+		try{
+		 newIndexArr = NewIndex.split(",");
+		}catch(err){
+			console.log(err);
+		}
+	}
 	if (newIndexArr[newIndexArr.length - 1] == 0 && OldIndex != -1) {
 		newIndexArr.forEach((value)=>{
 			let indexItem = parseInt(value);
@@ -713,7 +727,7 @@ var s_jo_crr_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCo
 		s_jo_crr_cd.SetItemCheck(0, 1, 0);
 		s_rlane_cd.RemoveAll();
 		s_rlane_cd.SetEnable(false);
-		
+
 	}
 	// when user check item form combo , combo rlane will be loaded data
 	let formObj = document.form;
