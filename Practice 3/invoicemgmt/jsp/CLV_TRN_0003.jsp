@@ -65,7 +65,7 @@
 	<!-- page_title_area(E) -->
 
 	<!-- wrap_search(S) -->
-	<div class="wrap_search_tab">
+	<div class="wrap_search tab">
 		<!-- opus_design_inquiry(S) -->
 		<div class="opus_design_inquiry wFit">
 			<table>

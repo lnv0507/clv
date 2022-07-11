@@ -5,7 +5,7 @@
 			<desc><![CDATA[SelectLane]]></desc>
 			<sql><![CDATA[
 SELECT DISTINCT(RLANE_CD)
-FROM joo_stl_tgt
+FROM joo_carrier
 WHERE JO_CRR_CD IN (#foreach($key IN ${jo_crr_cd})#if($velocityCount < $jo_crr_cd.size()) '$key', #else '$key' #end #end)			]]></sql>
 			<params>
 			</params>

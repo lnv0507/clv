@@ -142,14 +142,15 @@ let doActionIBSheet = (sheetObj, formObj, sAction) => {
 	 case IBDOWNEXCEL:
 		 let sizeSheet = sheetObj.RowCount();
 		 let indexSheet = sheetObj.id;
-		 if(sizeSheet < 1 && indexSheet === "sheet1") {
-		 ComShowCodeMessage("COM132501");
+		 if(sizeSheet < 1) {
+			 ComShowCodeMessage("COM132501");
+			 return;
 		 } 
-		 if(sizeSheet >= 1 && indexSheet === "sheet1"){
-		 sheetObj.Down2ExcelBuffer(true);
-		 sheetObj.Down2Excel({ FileName: 'excel1', SheetName: 'sheet1', DownCols:makeHiddenSkipCol(sheetObj), SheetDesign: 1, Merge: 1 });
-		 sheetObjects[1].Down2Excel({ SheetName: 'sheet2', DownCols:makeHiddenSkipCol(sheetObjects[1]), Merge: 1 });
-		 sheetObj.Down2ExcelBuffer(false);			
+		 if(sizeSheet >= 1){
+			 sheetObj.Down2ExcelBuffer(true);
+			 sheetObj.Down2Excel({ FileName: 'excel1', SheetName: 'sheet1', DownCols:makeHiddenSkipCol(sheetObj), SheetDesign: 1, Merge: 1 });
+			 sheetObjects[1].Down2Excel({ SheetName: 'sheet2', DownCols:makeHiddenSkipCol(sheetObjects[1]), Merge: 1 });
+			 sheetObj.Down2ExcelBuffer(false);			
 		 }
 		 if( indexSheet === "sheet2"){
 			formObj.f_cmd.value = COMMAND01;
@@ -451,6 +452,7 @@ let initSheet = (sheetObj) => {
 				InitColumns(cols);
 				SetColProperty(0, "rev_exp", { ComboText: "|Rev|Exp", ComboCode: "|R|E", DefaultValue: "R" });	
 				SetEditable(1);
+				SetWaitImageVisible(0);
 				ShowSubSum([{StdCol:"inv_no" , SumCols:"9|10",ShowCumulate:0,CaptionText:"",CaptionCol:3}]);
 			}
 			break;
@@ -541,9 +543,9 @@ let getDataRow = (sheetObj, row, saveNames) => {
 let changeTab = () => {
 	let currentSheet = getCurrentSheet();
 	let formQuery = getSearchOption();
-	console.log(searchSummary);
-	console.log(formQuery);
-	console.log(searchDetail);
+//	console.log(searchSummary);
+//	console.log(formQuery);
+//	console.log(searchDetail);
 	
 	if(searchSummary != formQuery && formQuery != searchDetail) {
 		ComShowCodeConfirm("COM130504");
@@ -555,7 +557,16 @@ let changeTab = () => {
 		doActionIBSheet(currentSheet, document.form, IBSEARCH)
 		return;
 	} 
-	doActionIBSheet(currentSheet, document.form, IBSEARCH)
+	if(currentSheet.RowCount() >= 1){
+		doActionIBSheet(currentSheet, document.form, IBSEARCH);
+		return;
+	}
+	
+	if(currentSheet.id == "sheet2"){
+		doActionIBSheet(currentSheet, document.form, IBSEARCH);
+		return;
+	}
+
 		
 }
 var tab1_OnChange = (tabObj, nItem) => {
@@ -592,7 +603,7 @@ var sheet1_OnDblClick = (sheetObj, Row, Col) => {
 	
 	if(typeof sheetObj != "object" ) return;
 	
-	if (sheetObjects[1].RowCount() == 0) {
+	if (sheetObjects[1].RowCount() === 0) {
 		doActionIBSheet(sheetObjects[1], document.form, IBSEARCH);
 	}
 	// setTimeout(function(){
@@ -644,7 +655,7 @@ let subsumTotalSum = (sheetObj) => {
 			sheetObj.GetCellValue(i-1, "locl_curr_cd"));
 		}
 	}
-	if (sheetObj.GetCellValue(rowLast, "inv_no") == '') {
+	if (sheetObj.GetCellValue(rowLast, "inv_no") === '') {
 		sheetObj.SetRangeFontBold(rowLast, 1, rowLast , 10, 1);
 		sheetObj.SetRowBackColor(rowLast, "#FFDAB9");
 	} 
@@ -652,11 +663,13 @@ let subsumTotalSum = (sheetObj) => {
 
 var sheet1_OnSearchEnd = (sheetObj, Code, Msg, StCode, StMsg) => {
 	ComOpenWait(false);
+	console.log("sheet1");
 	subsumTotalSum(sheetObj);
 }
 
 var sheet2_OnSearchEnd = (sheetObj, Code, Msg, StCode, StMsg) => {
 	ComOpenWait(false);
+	console.log("sheet1");
 	subsumTotalSum(sheetObj);
 }
 
@@ -693,12 +706,10 @@ var s_jo_crr_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCo
 		s_trd_cd.SetEnable(false);
 	} 
 	if (newIndexArr[newIndexArr.length - 1] == 0 && OldIndex != -1) {
-		
 		newIndexArr.forEach((value)=>{
-		let location = parseInt(value);
-		s_jo_crr_cd.SetItemCheck(location, 0, 0);
+			let indexItem = parseInt(value);
+			s_jo_crr_cd.SetItemCheck(indexItem, 0, 0);
 		});
-		
 		s_jo_crr_cd.SetItemCheck(0, 1, 0);
 		s_rlane_cd.RemoveAll();
 		s_rlane_cd.SetEnable(false);
@@ -753,11 +764,11 @@ var s_rlane_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCod
 
 // when click partner all unable Lane end Trade. if code != all Lane enable and
 // trade still unable
-var s_jo_crr_cd_OnCheckClick = (sheetObj, Index, Code) => {
+var s_jo_crr_cd_OnCheckClick = (sheetObj, index, code) => {
 	
-	if(typeof sheetObj != "object" || typeof Index != "number" || typeof Code != "string") return;
+	if(typeof sheetObj != "object" || typeof index != "number" || typeof code != "string") return;
 	
-	if (Code != "ALL") {
+	if (code != "ALL") {
 		s_rlane_cd.SetEnable(true);
 		return;
 	}

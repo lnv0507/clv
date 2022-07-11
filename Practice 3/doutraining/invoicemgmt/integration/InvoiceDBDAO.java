@@ -132,7 +132,7 @@ public class InvoiceDBDAO extends DBDAOSupport {
 
 		try {
 			if (invoiceList.size() > 0) {
-				velParam.put("jo_crr_cd", invoiceList);
+				velParam.put("jo_crr_cds", invoiceList);
 			}
 			param.put("rlane_cd", rlane);
 			dbRowset = new SQLExecuter("").executeQuery(
