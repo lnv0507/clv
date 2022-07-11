@@ -22,6 +22,7 @@ public class InvoiceBCImpl implements InvoiceBC {
 	public InvoiceBCImpl() {
 		invoiceDBDAO = new InvoiceDBDAO();
 	}
+
 	/**
 	 * 
 	 * @param invoiceCarrierVO
@@ -49,6 +50,7 @@ public class InvoiceBCImpl implements InvoiceBC {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
 	}
+
 	/**
 	 * 
 	 * @return List Partner
@@ -62,6 +64,7 @@ public class InvoiceBCImpl implements InvoiceBC {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
 	}
+
 	/**
 	 * 
 	 * @param invoiceList
@@ -77,28 +80,30 @@ public class InvoiceBCImpl implements InvoiceBC {
 		} catch (Exception ex) {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
-	
+
 	}
+
 	/**
 	 * 
 	 * @param invoiceList
-	 * @return  List Lane
+	 * @return List Lane
 	 * @throws EventException
 	 */
 	@Override
 	public List<InvoiceVO> searchLane(ArrayList<String> invoiceList)
 			throws EventException {
-	
+
 		try {
 			return invoiceDBDAO.searchLane(invoiceList);
 		} catch (Exception ex) {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
 	}
+
 	/**
 	 * 
 	 * @param invoiceCarrier
-	 * @return	List Detail
+	 * @return List Detail
 	 * @throws EventException
 	 */
 	@Override
@@ -122,6 +127,7 @@ public class InvoiceBCImpl implements InvoiceBC {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
 	}
+
 	/**
 	 * 
 	 * @param invoiceDetailVO

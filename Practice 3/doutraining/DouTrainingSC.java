@@ -15,25 +15,26 @@ package com.clt.apps.opus.dou.doutraining;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.clt.apps.opus.dou.doutraining.codeerrgmgt.vo.IntgCdDtlVO;
-import com.clt.apps.opus.dou.doutraining.codeerrgmgt.vo.IntgCdVO;
-import com.clt.apps.opus.dou.doutraining.codeerrgmgt.basic.INTGCdMgmtBC;
-import com.clt.apps.opus.dou.doutraining.codeerrgmgt.basic.INTGCdMgmtBCImpl;
-import com.clt.apps.opus.dou.doutraining.codeerrgmgt.event.ClvTrn0002Event;
 import com.clt.apps.opus.dou.doutraining.carriermgmt.basic.CarrierMgmtBC;
 import com.clt.apps.opus.dou.doutraining.carriermgmt.basic.CarrierMgmtBCImpl;
 import com.clt.apps.opus.dou.doutraining.carriermgmt.event.ClvTrn0004Event;
+import com.clt.apps.opus.dou.doutraining.carriermgmt.vo.CarrierVO;
+import com.clt.apps.opus.dou.doutraining.codeerrgmgt.basic.INTGCdMgmtBC;
+import com.clt.apps.opus.dou.doutraining.codeerrgmgt.basic.INTGCdMgmtBCImpl;
+import com.clt.apps.opus.dou.doutraining.codeerrgmgt.event.ClvTrn0002Event;
+import com.clt.apps.opus.dou.doutraining.codeerrgmgt.vo.IntgCdDtlVO;
+import com.clt.apps.opus.dou.doutraining.codeerrgmgt.vo.IntgCdVO;
+import com.clt.apps.opus.dou.doutraining.errmsgmgmt.integration.ErrMsgMgmtDBDAO;
 import com.clt.apps.opus.dou.doutraining.invoicemgmt.basic.InvoiceBC;
 import com.clt.apps.opus.dou.doutraining.invoicemgmt.basic.InvoiceBCImpl;
 import com.clt.apps.opus.dou.doutraining.invoicemgmt.event.ClvTrn0003Event;
 import com.clt.apps.opus.dou.doutraining.invoicemgmt.vo.InvoiceDetailVO;
 import com.clt.apps.opus.dou.doutraining.invoicemgmt.vo.InvoiceTradeVO;
 import com.clt.apps.opus.dou.doutraining.invoicemgmt.vo.InvoiceVO;
-import com.clt.apps.opus.dou.doutraining.carriermgmt.vo.CarrierVO;
+import com.clt.framework.component.message.ErrorHandler;
 import com.clt.framework.core.layer.event.Event;
 import com.clt.framework.core.layer.event.EventException;
 import com.clt.framework.core.layer.event.EventResponse;
-import com.clt.framework.component.message.ErrorHandler;
 import com.clt.framework.core.layer.event.GeneralEventResponse;
 import com.clt.framework.support.controller.html.FormCommand;
 import com.clt.framework.support.layer.service.ServiceCommandSupport;
@@ -76,7 +77,7 @@ public class DouTrainingSC extends ServiceCommandSupport {
 	}
 
 	/**
-	 * 
+	 * perform handle FormCommand
 	 */
 	public EventResponse perform(Event e) throws EventException {
 		// RDTO(Data Transfer Object including Parameters)
@@ -98,7 +99,7 @@ public class DouTrainingSC extends ServiceCommandSupport {
 				eventResponse = searchDetail(e);
 			}
 		}
-		/**
+		/*
 		 * Search Practice 4 If Event 0004 Search: get Dosearch of client call
 		 * dtb DEFAULT: GetData for Combo box on client MULTI: doing Multi
 		 * function of event
@@ -118,7 +119,7 @@ public class DouTrainingSC extends ServiceCommandSupport {
 			}
 
 		}
-		/**
+		/*
 		 * Search Practice 3 If Event 0003 Search: get Dosearch of client call
 		 * dtb DEFAULT: GetData for Combo box on client MULTI: doing Multi
 		 * function of event

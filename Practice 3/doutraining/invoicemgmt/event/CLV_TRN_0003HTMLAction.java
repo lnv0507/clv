@@ -20,7 +20,7 @@ public class CLV_TRN_0003HTMLAction extends HTMLActionSupport {
 	}
 
 	/**
-	 * perform
+	 * perform handle FormCommand
 	 */
 	@Override
 	public Event perform(HttpServletRequest request) throws HTMLActionException {

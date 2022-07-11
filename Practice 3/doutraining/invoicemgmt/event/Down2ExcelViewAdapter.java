@@ -19,6 +19,7 @@ public class Down2ExcelViewAdapter extends ViewAdapter {
 	public Down2ExcelViewAdapter() {
 
 	}
+
 	/**
 	 * call DirectDown2Excel make xml to download
 	 */
