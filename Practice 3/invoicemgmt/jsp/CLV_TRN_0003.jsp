@@ -65,7 +65,7 @@
 	<!-- page_title_area(E) -->
 
 	<!-- wrap_search(S) -->
-	<div class="wrap_search tab">
+	<div class="wrap_search_tab">
 		<!-- opus_design_inquiry(S) -->
 		<div class="opus_design_inquiry wFit">
 			<table>
@@ -111,16 +111,16 @@
 
 	<!-- wrap_result(S) -->
         <div class="wrap_result">
-            <div class="opus_design_tab">
+            <div class="opus_design_tab sm">
                 <script type="text/javascript">ComTabObject('tab1')</script>
             </div>
                 <!-- opus_design_grid(S) -->
-                <div class="opus_design_grid" name="tabLayer" id="tabLayer">
+                <div class="opus_design_grid clear" name="tabLayer" id="tabLayer">
                 	<script language="javascript">ComSheetObject('sheet1');</script>
                 </div>
                 <!-- opus_design_grid(E) -->
                 <!-- opus_design_grid(S) -->
-                <div class="opus_design_grid" name="tabLayer" id="tabLayer">
+                <div class="opus_design_grid clear" name="tabLayer" id="tabLayer">
                 	<script language="javascript">ComSheetObject('sheet2');</script>
                 </div>
                 <!-- opus_design_grid(E) -->
