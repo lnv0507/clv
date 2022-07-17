@@ -30,8 +30,7 @@ public class CLV_TRN_0003HTMLAction extends HTMLActionSupport {
 		// Check if FormCommand is
 		// SEARCH , we will search data for summary grid
 		if (command.isCommand(FormCommand.SEARCH)) {
-			InvoiceCarrierVO invoiceCarrier = (InvoiceCarrierVO) getVO(request,
-					InvoiceCarrierVO.class, "");
+			InvoiceCarrierVO invoiceCarrier = (InvoiceCarrierVO) getVO(request, InvoiceCarrierVO.class, "");
 			event.setInvoiceCarrierVO(invoiceCarrier);
 		}
 		// SEARCH01 , we will get data for land combo box
@@ -49,23 +48,17 @@ public class CLV_TRN_0003HTMLAction extends HTMLActionSupport {
 		}
 		// SEARCH03 , we will search data for detail grid
 		if (command.isCommand(FormCommand.SEARCH03)) {
-			InvoiceCarrierVO invoiceCarrier = (InvoiceCarrierVO) getVO(request,
-					InvoiceCarrierVO.class, "");
+			InvoiceCarrierVO invoiceCarrier = (InvoiceCarrierVO) getVO(request, InvoiceCarrierVO.class, "");
 			event.setInvoiceCarrierVO(invoiceCarrier);
 		}
 		// Command 01, we will get data detail for downExcel
 		if (command.isCommand(FormCommand.COMMAND01)) {
 			InvoiceDetailVO invoiceDetailVO = new InvoiceDetailVO();
-			invoiceDetailVO.setFrAcctYrmon(JSPUtil.getParameter(request,
-					"fr_acct_yrmon", ""));
-			invoiceDetailVO.setToAcctYrmon(JSPUtil.getParameter(request,
-					"to_acct_yrmon", ""));
-			invoiceDetailVO.setJoCrrCd(JSPUtil.getParameter(request,
-					"s_jo_crr_cd", ""));
-			invoiceDetailVO.setRlaneCd(JSPUtil.getParameter(request,
-					"s_rlane_cd", ""));
-			invoiceDetailVO.setTrdCd(JSPUtil.getParameter(request, "s_trd_cd",
-					""));
+			invoiceDetailVO.setFrAcctYrmon(JSPUtil.getParameter(request, "fr_acct_yrmon", ""));
+			invoiceDetailVO.setToAcctYrmon(JSPUtil.getParameter(request, "to_acct_yrmon", ""));
+			invoiceDetailVO.setJoCrrCd(JSPUtil.getParameter(request, "s_jo_crr_cd", ""));
+			invoiceDetailVO.setRlaneCd(JSPUtil.getParameter(request, "s_rlane_cd", ""));
+			invoiceDetailVO.setTrdCd(JSPUtil.getParameter(request, "s_trd_cd", ""));
 			event.setInvoiceDetailVO(invoiceDetailVO);
 		}
 		return event;

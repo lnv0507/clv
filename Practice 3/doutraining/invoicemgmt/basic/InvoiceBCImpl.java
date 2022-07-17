@@ -19,6 +19,9 @@ import com.clt.framework.core.layer.integration.DAOException;
 public class InvoiceBCImpl implements InvoiceBC {
 	private transient InvoiceDBDAO invoiceDBDAO = null;
 
+	/**
+	 * constructor
+	 */
 	public InvoiceBCImpl() {
 		invoiceDBDAO = new InvoiceDBDAO();
 	}

@@ -39,7 +39,6 @@ public class InvoiceDBDAO extends DBDAOSupport {
 		try {
 			if (invoiceCarrierVO != null) {
 				Map<String, String> mapVO = invoiceCarrierVO.getColumnValues();
-
 				param.putAll(mapVO);
 				velParam.putAll(mapVO);
 			}

@@ -159,8 +159,7 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		ClvTrn0003Event event = (ClvTrn0003Event) e;
 		InvoiceBC command = new InvoiceBCImpl();
 		try {
-			eventResponse.setRsVoList(command.searchDown2Excel((event
-					.getInvoiceDetailVO())));
+			eventResponse.setRsVoList(command.searchDown2Excel((event.getInvoiceDetailVO())));
 		} catch (Exception ex) {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
 		}
@@ -178,8 +177,7 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		ClvTrn0003Event event = (ClvTrn0003Event) e;
 		InvoiceBC command = new InvoiceBCImpl();
 		try {
-			List<InvoiceVO> list = command.searchInvoiceVO(event
-					.getInvoiceCarrierVO());
+			List<InvoiceVO> list = command.searchInvoiceVO(event.getInvoiceCarrierVO());
 			eventResponse.setRsVoList(list);
 		} catch (Exception ex) {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
@@ -308,8 +306,7 @@ public class DouTrainingSC extends ServiceCommandSupport {
 		InvoiceBC command = new InvoiceBCImpl();
 
 		try {
-			List<InvoiceDetailVO> list = command.searchInvoiceDetailVO(event
-					.getInvoiceCarrierVO());
+			List<InvoiceDetailVO> list = command.searchInvoiceDetailVO(event.getInvoiceCarrierVO());
 			eventResponse.setRsVoList(list);
 		} catch (Exception ex) {
 			throw new EventException(new ErrorHandler(ex).getMessage(), ex);
