@@ -8,7 +8,9 @@ let tabObjects = new Array();
 let tabCnt = 0;
 let beforetab = 0;
 
-// Check type of param
+/**
+ * Check type of param
+ */ 
 let isTrueType = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCode) => {
 
     let arrAssign = [OldText, OldIndex, OldCode, NewText, NewIndex, NewCode];
@@ -53,39 +55,42 @@ let setTabObject = (tab_obj) => {
  * format date
  */
 let getDateFormat = (obj, sFormat) => {
+	
+	if(typeof obj !== "string" || typeof sFormat !== "string") return;
 
-    let sVal = String(getArgValue(obj));
+    let sVal = obj;
     
     sVal = sVal.replace(/\/|\-|\.|\:|\ /g, "");
     
     if (ComIsEmpty(sVal))
         return "";
     
-    console.log(sVal);
     let retValue = "";
     switch (sFormat) {
         case "ym":
-            retValue = sVal.substring(0, 6);
-            console.log(retValue);
+            retValue = sVal.substring(0, 6);   
             break;
     }
-    retValue = ComGetMaskedValue(retValue, sFormat);
-    console.log(retValue);
+    retValue = ComGetMaskedValue(retValue, sFormat); //sFormat = ym -> ComGetMasked (a,b) -> return 2022-01
     return retValue;
 }
 
-// Get month and year to present
-// if from month = month to - 2 because avoid over 3month
+/**
+ * Get month and year to present
+ *  if from month = month to - 2 because avoid over 3month
+ */ 
 let initCalendar = () => {
     let formObj = document.form;
-    let ymTo = ComGetNowInfo("ym", "-");
+    let ymTo = ComGetNowInfo("ym", "-"); //  ComGetNowInfo("ym", "-" ) return : 2022-07
 
     formObj.to_acct_yrmon.value = ymTo;
     let ymFrom = ComGetDateAdd(formObj.to_acct_yrmon.value + "-01", "M", -1);
     formObj.fr_acct_yrmon.value = getDateFormat(ymFrom, "ym");
 }
 
-// if to date - from date > 88days -> 3month -> overDate
+/**
+ *  if to date - from date > 88days -> 3month -> overDate
+ */
 let checkOver3Month = () => {
     let formObj = document.form;
     let fromDate = formObj.fr_acct_yrmon.value.replaceStr("-", "") + "01";
@@ -96,20 +101,24 @@ let checkOver3Month = () => {
     return true;
 }
 
-// check from date always smaller than to date
+/**
+ *  check from date always smaller than to date
+ */
 let isValidDate = () => {
     let from = new Date(document.form.fr_acct_yrmon.value);
     let to = new Date(document.form.to_acct_yrmon.value);
     return from < to;
 }
 
-// handle month when press previos or next -> +- 1 value month
+/**
+ * handle month when press previos or next -> +- 1 value month
+ */ 
 let changeMonth = (obj, month) => {
 
     if (obj.value === "") return;
 
     if (obj.value !== "") {
-        obj.value = ComGetDateAdd(obj.value + "-01", "M", month).substr(0, 7);
+        obj.value = ComGetDateAdd(obj.value + "-01", "M", month).substr(0, 7); //ComGetDateAdd("2022-01-01", "-01", "M", month) today:20220101  return"20211201"
     }
 }
 
@@ -137,8 +146,11 @@ let doActionIBSheet = (sheetObj, formObj, sAction) => {
     switch (sAction) {
         // Retrieve button event.
         case IBSEARCH:
+        	ComOpenWait(true);
             if (sheetObj.id === "sheet1") {
+            	
                 searchSummary = getSearchOption();
+                console.log(searchSummary+ "search summary");
                 formObj.f_cmd.value = SEARCH;
                 sheetObj.DoSearch("CLV_TRN_0003GS.do", FormQueryString(formObj), { Sync: 1 });
             }
@@ -205,7 +217,9 @@ let doActionIBSheet = (sheetObj, formObj, sAction) => {
     }
 }
 
-// reset all sheet and input
+/**
+ *  reset all sheet and input
+ */
 let onclickButtonNew = () => {
     ComResetAll();
     initCalendar();
@@ -298,8 +312,10 @@ let processButtonClick = () => {
     }
 }
 
-// ONCLICK BUTTON
-// EVENT
+/**
+ * ONCLICK BUTTON
+	EVENT
+ */ 
 document.onclick = processButtonClick;
 
 /**
@@ -313,10 +329,10 @@ let addComboItem = (comboObj, comboItems) => {
     if (typeof comboObj === 'undefined' || !Array.isArray(comboItems)) return;
 
     let assignComboItems = [...comboItems];
-    console.log(assignComboItems);
+    console.log(assignComboItems + "assignCombo");
     assignComboItems.forEach((item, index) => {
         let comboItem = assignComboItems[index].split(",");
-        // console.log(comboItem);
+         console.log(comboItem + "comboItem");
         if (comboItem.length === 1) {
             comboObj.InsertItem(index, comboItem[0], comboItem[0]);
         }
@@ -338,8 +354,7 @@ let addComboItem = (comboObj, comboItems) => {
 let initCombo = (comboObj, comboNo) => {
 
     if (typeof comboObj === 'undefined') return;
-
-    let formObj = document.form;
+    
     switch (comboNo) {
         case 1:
             with(comboObj) {
@@ -351,7 +366,7 @@ let initCombo = (comboObj, comboNo) => {
             partnerList = "ALL|" + partnerList;
             let comboItems = partnerList.split("|");
             addComboItem(comboObj, comboItems);
-            comboObj.SetSelectIndex(0, 1, 0, 0);
+            comboObj.SetSelectIndex(0, true); // set 0 then show ALL if true is entered, select as many as the number of items that can be selected.
             break;
     }
 }
@@ -381,7 +396,23 @@ let initSheet = (sheetObj) => {
                 let HeadTitle1 = "|Partner|Lane|Invoice No|Slip No|Approved|Curr.|Revenue|Expense|Customer/S.Provider|Customer/S.Provider|cust_vndr_cnt_cd|cust_vndr_seq";
                 let HeadTitle2 = "|Partner|Lane|Invoice No|Slip No|Approved|Curr.|Revenue|Expense|Code|Name|cust_vndr_cnt_cd|cust_vndr_seq";
                 SetConfig({ SearchMode: 2, MergeSheet: 5, Page: 20, FrozenCol: 0, DataRowMerge: 1 });
+                /*
+                 * //SetConFig: configure how to fetch initialized sheet, location of frozen rows or columns and other basic configurations.
+                	// SearchMode: 2 (is where you can configure search mode)
+    				// LazyLoad mode
+    				// Search all data and display search result data on the screen by page as set in Page property value according to the scroll location
+                	// MergeSheet: 5 (is where you can configure merge styles)
+    				// Value: msHeaderOnly
+    				// Allow merge in the header rows only
+                	// FrozenCol: 0 (is where you can select the frozen column count in the left)
+                	// DataRowMerge: 1 (Whether to allow horizontal merge of the entire row.)
+                 */
                 let info = { Sort: 0, ColMove: 0, HeaderCheck: 0, ColResize: 1 };
+              //Define header functions such as sorting and column movement permissions in json format
+        		// Sort: 1 (allow sorting by clicking on the header)
+        		// ColMove: 1 (allow column movement in header)
+        		// HeaderCheck : 0 (the CheckAll in the header is not checked)
+        		// ColResize: 1 (allow resizing of column width)
                 let headers = [{ Text: HeadTitle1, Align: "Center" }, { Text: HeadTitle2, Align: "Center" }];
                 InitHeaders(headers, info);
                 let cols = [
@@ -481,6 +512,9 @@ let initSheet = (sheetObj) => {
  * split tab
  */
 let initTab = (tabObj, tabNo) => {
+	
+	if(typeof tabObj !== "object" || typeof tabNo !== "number") return;
+	
     switch (tabNo) {
         case 1:
             with(tabObj) {
@@ -539,7 +573,8 @@ let loadPage = () => {
  *            selected row
  * @param saveNames:
  *            array of save name
- * @returns data
+ * @returns data row 
+ * example: EMCBH2EMC210800118TSINHO21080002USDTW500495
  */
 let getDataRow = (sheetObj, row, saveNames) => {
 
@@ -561,33 +596,31 @@ let getDataRow = (sheetObj, row, saveNames) => {
  * data and check formQuery present if != show message
  */
 let changeTab = () => {
+	
     let currentSheet = getCurrentSheet();
     let formQuery = getSearchOption();
-    //	console.log(searchSummary);
-    //	console.log(formQuery);
-    //	console.log(searchDetail);
 
-    if (searchSummary != formQuery && formQuery !== searchDetail) {
+    if (searchSummary !== formQuery && formQuery !== searchDetail) {
         if (!ComShowCodeConfirm("COM130504")) return;
-        console.log("check123");
         doActionIBSheet(currentSheet, document.form, IBSEARCH);
         return;
-
     }
-    if (currentSheet.id == "sheet1" && searchSummary !== formQuery) { // in
-        // summary
+    
+    if (currentSheet.id === "sheet1" && searchSummary !== formQuery) { 
         doActionIBSheet(currentSheet, document.form, IBSEARCH)
         return;
     }
+    
+    if (currentSheet.id === "sheet2" && searchDetail !== formQuery && sheetObjects[0].RowCount() >= 1) { 
+        doActionIBSheet(currentSheet, document.form, IBSEARCH)
+        return;
+    }
+    
     if (currentSheet.RowCount() >= 1) {
-        doActionIBSheet(currentSheet, document.form, IBSEARCH);
         return;
     }
-
-    if (currentSheet.id === "sheet2") {
-        doActionIBSheet(currentSheet, document.form, IBSEARCH);
-        return;
-    }
+   
+   
 }
 
 /**
@@ -639,7 +672,7 @@ var sheet1_OnDblClick = (sheetObj, Row, Col) => {
         // sheetObj.HeaderRows() = size Header
         for (let i = sheetObj.HeaderRows(); i <= size; i++) {
             let detailData = getDataRow(sheet2, i, saveNames);
-            // console.log(getDataRow(sheet2, i, saveNames));
+          
             // getDataRow(sheet2, i, saveNames) = SUM String ROW
             if (summaryData === detailData) {
                 tab1_OnChange(tabObjects[1], 1);
@@ -651,7 +684,9 @@ var sheet1_OnDblClick = (sheetObj, Row, Col) => {
     }
 }
 
-// Total Sum
+/**
+ *  Total Sum
+ */
 let subsumTotalSum = (sheetObj) => {
 
     if (typeof sheetObj != "object") return;
@@ -700,7 +735,7 @@ var sheet1_OnSearchEnd = (sheetObj, Code, Msg, StCode, StMsg) => {
  */
 var sheet2_OnSearchEnd = (sheetObj, Code, Msg, StCode, StMsg) => {
     ComOpenWait(false);
-    console.log("sheet1");
+    console.log("sheet2");
     subsumTotalSum(sheetObj);
 }
 
@@ -711,7 +746,6 @@ let initComboBoxLane = (laneList) => {
 
     if (typeof laneList != "string") return;
 
-    let formObj = document.form;
     with(comboObjects[1]) {
         RemoveAll();
         SetMultiSelect(0);
@@ -726,33 +760,29 @@ let initComboBoxLane = (laneList) => {
  */
 var s_jo_crr_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCode) => {
 
-
     let newIndexArr = [];
-
 
     isTrueType(OldText, OldIndex, OldCode, NewText, NewIndex, NewCode);
 
-
-
-    // handling events when user checks all item partner's combo
-    if (OldIndex == 0) {
-        s_jo_crr_cd.SetItemCheck(0, 0, 0);
-    }
-    if (NewIndex == -1) {
-        s_jo_crr_cd.SetItemCheck(0, 1, 0);
-        s_rlane_cd.RemoveAll();
-        s_rlane_cd.SetEnable(false);
-        s_trd_cd.RemoveAll();
-        s_trd_cd.SetEnable(false);
-    }
-    if (OldIndex != 0) {
+    if (OldIndex !== 0) {
         try {
             newIndexArr = NewIndex.split(",");
         } catch (err) {
             console.log(err);
         }
     }
-    if (newIndexArr[newIndexArr.length - 1] == 0 && OldIndex != -1) {
+    // handling events when user checks all item partner's combo
+    if (OldIndex === 0) {
+        s_jo_crr_cd.SetItemCheck(0, 0, 0);
+    }
+    if (NewIndex === -1) {
+        s_jo_crr_cd.SetItemCheck(0, 1, 0);
+        s_rlane_cd.RemoveAll();
+        s_rlane_cd.SetEnable(false);
+        s_trd_cd.RemoveAll();
+        s_trd_cd.SetEnable(false);
+    }
+    if (newIndexArr[newIndexArr.length - 1] === 0 && OldIndex !== -1) {
         newIndexArr.forEach((value) => {
             let indexItem = parseInt(value);
             s_jo_crr_cd.SetItemCheck(indexItem, 0, 0);
@@ -776,8 +806,6 @@ var s_jo_crr_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCo
 let initComboBoxTrade = (tradeList) => {
 
     if (typeof tradeList != "string") return;
-
-    let formObj = document.form;
 
     with(comboObjects[2]) {
         RemoveAll();
@@ -811,8 +839,10 @@ var s_rlane_cd_OnChange = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCod
 
 
 
-// when click partner all unable Lane end Trade. if code != all Lane enable and
-// trade still unable
+/**
+ *  when click partner all unable Lane end Trade. if code != all Lane enable and
+ *  trade still unable
+ */
 var s_jo_crr_cd_OnCheckClick = (sheetObj, index, code) => {
 
     if (typeof sheetObj != "object" || typeof index != "number" || typeof code != "string") return;
