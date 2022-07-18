@@ -189,20 +189,20 @@ SELECT
     nvl(pro_cd,'00001') pro_cd,
     nvl(ord.total, 0) total
 FROM
-         report left
-    JOIN (
+    report 
+    LEFT JOIN (
         SELECT
             pro_cd,
             substr(ord_dttm, 1, 6) AS ord_dttm,
-            COUNT(*)               total
+            COUNT(*) total
         FROM
             tb_ord
         WHERE
             pro_cd = '00001'
         GROUP BY
             pro_cd,
-            substr(ord_dttm, 1, 6)
-    ) ord ON report.dt = ord.ord_dttm;
+            substr(ord_dttm, 1, 6)) ord 
+    ON report.dt = ord.ord_dttm;
 
 --D) Gi? s? lúc ??u s?n ph?n 00001 có 100 cái, vi?t report ?? tính s? l??ng remain theo tháng 06, 07, 08, 09
 WITH report AS (
@@ -227,26 +227,22 @@ WITH report AS (
         dual
 )
 SELECT
-    report.dt,
+    report.dt, 
     nvl(ord.total, 0) total,
-    100 - nvl(SUM(ord.total)
-              OVER(PARTITION BY ord.pro_cd
-                   ORDER BY
-                       report.dt
-              ), 0)             AS remain
+    100 - nvl(SUM(ord.total) OVER(PARTITION BY ord.pro_cd ORDER BY report.dt), 0) AS remain
 FROM
-         report
+    report
     LEFT JOIN (
         SELECT
             pro_cd,
             substr(ord_dttm, 1, 6) AS ord_dttm, 
-            COUNT(*)               total
+            COUNT(*) total
         FROM
             tb_ord
         WHERE
             pro_cd = '00001'
         GROUP BY
             pro_cd,
-            substr(ord_dttm, 1, 6)
-    ) ord ON report.dt = ord.ord_dttm;
+            substr(ord_dttm, 1, 6)) ord 
+    ON report.dt = ord.ord_dttm;
     
