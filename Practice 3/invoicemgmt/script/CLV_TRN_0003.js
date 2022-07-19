@@ -10,7 +10,7 @@ let beforetab = 0;
 
 /**
  * Check type of param
- */ 
+ */
 let isTrueType = (OldText, OldIndex, OldCode, NewText, NewIndex, NewCode) => {
 
     let arrAssign = [OldText, OldIndex, OldCode, NewText, NewIndex, NewCode];
@@ -55,20 +55,20 @@ let setTabObject = (tab_obj) => {
  * format date
  */
 let getDateFormat = (obj, sFormat) => {
-	
-	if(typeof obj !== "string" || typeof sFormat !== "string") return;
+
+    if (typeof obj !== "string" || typeof sFormat !== "string") return;
 
     let sVal = obj;
-    
+
     sVal = sVal.replace(/\/|\-|\.|\:|\ /g, "");
-    
+
     if (ComIsEmpty(sVal))
         return "";
-    
+
     let retValue = "";
     switch (sFormat) {
         case "ym":
-            retValue = sVal.substring(0, 6);   
+            retValue = sVal.substring(0, 6);
             break;
     }
     retValue = ComGetMaskedValue(retValue, sFormat); //sFormat = ym -> ComGetMasked (a,b) -> return 2022-01
@@ -78,7 +78,7 @@ let getDateFormat = (obj, sFormat) => {
 /**
  * Get month and year to present
  *  if from month = month to - 2 because avoid over 3month
- */ 
+ */
 let initCalendar = () => {
     let formObj = document.form;
     let ymTo = ComGetNowInfo("ym", "-"); //  ComGetNowInfo("ym", "-" ) return : 2022-07
@@ -112,7 +112,7 @@ let isValidDate = () => {
 
 /**
  * handle month when press previos or next -> +- 1 value month
- */ 
+ */
 let changeMonth = (obj, month) => {
 
     if (obj.value === "") return;
@@ -146,11 +146,11 @@ let doActionIBSheet = (sheetObj, formObj, sAction) => {
     switch (sAction) {
         // Retrieve button event.
         case IBSEARCH:
-        	ComOpenWait(true);
+            ComOpenWait(true);
             if (sheetObj.id === "sheet1") {
-            	
+
                 searchSummary = getSearchOption();
-                console.log(searchSummary+ "search summary");
+                console.log(searchSummary + "search summary");
                 formObj.f_cmd.value = SEARCH;
                 sheetObj.DoSearch("CLV_TRN_0003GS.do", FormQueryString(formObj), { Sync: 1 });
             }
@@ -251,9 +251,9 @@ let processButtonClick = () => {
             case "btn_Retrieve":
                 // asking user want to retrieve data by month
                 // if over 3 months
-                if (!checkOver3Month() ) {
+                if (!checkOver3Month()) {
                     // the variable to store user's choose
-                	if(ComShowCodeConfirm("COM12345")) doActionIBSheet(getCurrentSheet(), formObj, IBSEARCH);
+                    if (ComShowCodeConfirm("COM12345")) doActionIBSheet(getCurrentSheet(), formObj, IBSEARCH);
                     return;
                 }
                 doActionIBSheet(getCurrentSheet(), formObj, IBSEARCH);
@@ -315,7 +315,7 @@ let processButtonClick = () => {
 /**
  * ONCLICK BUTTON
 	EVENT
- */ 
+ */
 document.onclick = processButtonClick;
 
 /**
@@ -332,7 +332,7 @@ let addComboItem = (comboObj, comboItems) => {
     console.log(assignComboItems + "assignCombo");
     assignComboItems.forEach((item, index) => {
         let comboItem = assignComboItems[index].split(",");
-         console.log(comboItem + "comboItem");
+        console.log(comboItem + "comboItem");
         if (comboItem.length === 1) {
             comboObj.InsertItem(index, comboItem[0], comboItem[0]);
         }
@@ -354,7 +354,7 @@ let addComboItem = (comboObj, comboItems) => {
 let initCombo = (comboObj, comboNo) => {
 
     if (typeof comboObj === 'undefined') return;
-    
+
     switch (comboNo) {
         case 1:
             with(comboObj) {
@@ -408,11 +408,11 @@ let initSheet = (sheetObj) => {
                 	// DataRowMerge: 1 (Whether to allow horizontal merge of the entire row.)
                  */
                 let info = { Sort: 0, ColMove: 0, HeaderCheck: 0, ColResize: 1 };
-              //Define header functions such as sorting and column movement permissions in json format
-        		// Sort: 1 (allow sorting by clicking on the header)
-        		// ColMove: 1 (allow column movement in header)
-        		// HeaderCheck : 0 (the CheckAll in the header is not checked)
-        		// ColResize: 1 (allow resizing of column width)
+                //Define header functions such as sorting and column movement permissions in json format
+                // Sort: 1 (allow sorting by clicking on the header)
+                // ColMove: 1 (allow column movement in header)
+                // HeaderCheck : 0 (the CheckAll in the header is not checked)
+                // ColResize: 1 (allow resizing of column width)
                 let headers = [{ Text: HeadTitle1, Align: "Center" }, { Text: HeadTitle2, Align: "Center" }];
                 InitHeaders(headers, info);
                 let cols = [
@@ -430,7 +430,7 @@ let initSheet = (sheetObj) => {
                     { Type: "Text", Hidden: 1, Width: 90, Align: "Left", ColMerge: 0, SaveName: "cust_vndr_cnt_cd", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
                     { Type: "Text", Hidden: 1, Width: 90, Align: "Left", ColMerge: 0, SaveName: "cust_vndr_seq", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 }
                 ];
-                /**
+                /*
                  * @param:Type (String) : Column data type
                  * @param: Hidden (Boolean): Whether a column is hidden
                  * @param: Width (Number) : Column width
@@ -512,9 +512,9 @@ let initSheet = (sheetObj) => {
  * split tab
  */
 let initTab = (tabObj, tabNo) => {
-	
-	if(typeof tabObj !== "object" || typeof tabNo !== "number") return;
-	
+
+    if (typeof tabObj !== "object" || typeof tabNo !== "number") return;
+
     switch (tabNo) {
         case 1:
             with(tabObj) {
@@ -596,7 +596,7 @@ let getDataRow = (sheetObj, row, saveNames) => {
  * data and check formQuery present if != show message
  */
 let changeTab = () => {
-	
+
     let currentSheet = getCurrentSheet();
     let formQuery = getSearchOption();
 
@@ -605,22 +605,22 @@ let changeTab = () => {
         doActionIBSheet(currentSheet, document.form, IBSEARCH);
         return;
     }
-    
-    if (currentSheet.id === "sheet1" && searchSummary !== formQuery) { 
+
+    if (currentSheet.id === "sheet1" && searchSummary !== formQuery) {
         doActionIBSheet(currentSheet, document.form, IBSEARCH)
         return;
     }
-    
-    if (currentSheet.id === "sheet2" && searchDetail !== formQuery && sheetObjects[0].RowCount() >= 1) { 
+
+    if (currentSheet.id === "sheet2" && searchDetail !== formQuery && sheetObjects[0].RowCount() >= 1) {
         doActionIBSheet(currentSheet, document.form, IBSEARCH)
         return;
     }
-    
+
     if (currentSheet.RowCount() >= 1) {
         return;
     }
-   
-   
+
+
 }
 
 /**
@@ -672,7 +672,7 @@ var sheet1_OnDblClick = (sheetObj, Row, Col) => {
         // sheetObj.HeaderRows() = size Header
         for (let i = sheetObj.HeaderRows(); i <= size; i++) {
             let detailData = getDataRow(sheet2, i, saveNames);
-          
+
             // getDataRow(sheet2, i, saveNames) = SUM String ROW
             if (summaryData === detailData) {
                 tab1_OnChange(tabObjects[1], 1);
